@@ -14,6 +14,20 @@ typedef enum {
 // typedef int FormType; 
 typedef void* Form;
 
+/*
+ * Create a new form 
+ * @param type the type of the new form
+ * @param id the identifier of the form
+ * @param x the horizontal axis of the form
+ * @param y the vertical axis of the form
+ * @param wr the width/radius/x2 of the form (depending on the type)
+ * @param h the height/y2 of the form (depending on the type)
+ * @param text the text of the form (available for text type)
+ * @param style the style of the form
+ * @return the new form created
+*/
+Form new_form(FormType type, int id, double x, double y, double wr, double h, char *text, FormStyle style);
+
 /* 
  * Sets the minimum bounding box of the form in the given variables
  * @param form the form to get the bounding box
