@@ -5,13 +5,13 @@
  * @file dictionary.h
  * @brief Generic dictionary implementation
 
- * Dictionary is a data structure that mapss key to values, providing efficient operations
+ * Dictionary is a data structure that maps key to values, providing efficient operations
  * @author: Gustavo Stallmann
 */
 
-typedef void* Dict; 
+typedef void *Dict; 
 typedef int DictKey; 
-typedef void* DictValue; 
+typedef void *DictValue; 
 
 /*
  * Create a new dict instance
@@ -38,13 +38,23 @@ void dict_remove(Dict dict, DictKey key);
 /*
  * Get a value from a key
  * @param "dict" dict instance to get the value
- * @parma "key" the key to get the value from
+ * @param "key" the key to get the value from
+ * @return "DictValue" the value associated with the key
 */
 DictValue dict_get(Dict dict, DictKey key);
 
 /*
+ * Checks if a key is empty or not 
+ * @param "dict" dict instance
+ * @param "key" the key to be checked
+ * @return true if its empty, false otherwise
+*/
+bool dict_is_empty(Dict, DictKey key);
+
+/*
  * Get the size of the given dict
  * @param "dict" instance to get the size
+ * @return the size of the dict
 */
 int dict_get_size(Dict dict); 
 

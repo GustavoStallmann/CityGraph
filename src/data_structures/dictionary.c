@@ -58,6 +58,14 @@ DictValue dict_get(Dict dict, DictKey key) {
     return d->values[key];
 }
 
+bool dict_is_empty(Dict dict, DictKey key) {
+    assert(dict); 
+    if (key > dict_get_size(dict) || key < 0) return false;
+
+    Dict_st *d = (Dict_st *)dict;
+    return d->values[key] == NULL;
+}
+
 void dict_free(Dict dict) {
     Dict_st *d = (Dict_st *) dict; 
 
