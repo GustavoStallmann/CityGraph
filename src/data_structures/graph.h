@@ -25,6 +25,7 @@ A documentacao deste modulo deve ser melhorada.
 */
 
 #include <stdbool.h>
+#include <string.h>
 
 typedef void *Graph;
 typedef int Node;
@@ -43,65 +44,119 @@ typedef void *Info;
 // bool (*dfsRestarted)(Graph g, void *extra);
 
 /*
-    Cria um grafo com, no maximo, "nVert" vertices.
- */
-Graph createGraph(int nVert, bool directed);
+ * Cria uma nova instancia de grafo
+ * @param "nVert" quantidade máxima de vértices
+ * @param "direct" determina se o grafo é direcionado ou não
+ * @param "nomeGrafo" define o nome dado ao grafo
+ * @retunr "Graph" nova instancia de grafo
+*/
+Graph createGraph(int nVert, bool directed, char *nomeGrafo);
 
 /*
-    Retorna numero maximo de vertices que grafo g pode conter.
+ * Retorna numero máximo de vertices de um grafo
+ * @param "Graph" grafo que deseja obter a quantidade
+ * @param "int" quantidade máxima de vértices
  */
 int getMaxNodes(Graph g);
 
 /*
-    Retorna numero total de vertices adicionados ao grafo gr.
+ * Retorna numero total de vertices adicionados ao grafo
+ * @param "Graph" grafo que deseja obter a quantidade
+ * @return "int" quantidade de vertices
  */
 int getTotalNodes(Graph g);
 
 /*
-    Adiciona um novo vértice ao grafo "g" com o nome "nome".
- */
+ * Adiciona um novo vértice ao grafo
+ * @param "Graph" grafo que terá o vértice adicionado
+ * @param "nome" nome do node adicionado
+ * @param "info" informação associada ao nó
+ * @return "Node" novo nó adicionado
+*/
 Node addNode(Graph g, char *nome, Info info);
 
 /*
-    Retorna no' cujo de nome e' "nome".
+ * Busca um nó de um grafo pelo seu nome
+ * @param "g" grafo para busca
+ * @param "nome" nome do node para busca
+ * @return "Node" id do node ou -1 caso não encontre uma correspondência
  */
 Node getNode(Graph g, char *nome);
 
 /*
+ * Retorna a informação associada ao nó dado
+ * @param "Graph" grafo que o nó é associado
+ * @param "node" nó que deseja obter a informação
+ * @return "Info" a informação associada ao nó
  */
 Info getNodeInfo(Graph g, Node node);
 
 /*
+ * Retorna o nome do node dado
+ * @param "Graph" grafo que o nó é associado
+ * @param "node" nó que deseja-se obter o nome
+ * @return O nome associado ao nó
  */
-char *getNodeName(Graph g, Node node);
+char* getNodeName(Graph g, Node node);
 
 /*
+ * Define a informação associada a um vértice
+ * @param "Graph" grafo que o nó está associado
+ * @param "node" nó que terá a informação alterada
+ * @param "info"  nova informação do node
  */
-// void setNodeInfo(Graph g, Node node, info);
+void setNodeInfo(Graph g, Node node, Info info);
 
 /*
+ * Adiciona uma nova aresta ao nó
+ * @param "Graph" grafo que os nós estão associados
+ * @param "from" nó de partida da aresta
+ * @param "to" nó final de destino da aresta
+ * @param "info" informação que a aresta armazenará
+ * @return "Edge" nova aresta criada
  */
 Edge addEdge(Graph g, Node from, Node to, Info info);
 
 /*
+ * Retorna uma aresta que relaciona os nós
+ * @param "Graph" grafo que os nós estão associados
+ * @param "from" nó de partida da aresta
+ * @param "to" nó final de destino da aresta
+ * @return "Edge" aresta que associa os nós
  */
 Edge getEdge(Graph g, Node from, Node to);
 
 /*
- */
-// Node getFromNode(Graph g, e);
+ * Retorna o node "from" associado a uma aresta
+ * @param "Graph" grafo que o edge está associado
+ * @param "e" edge que deseja-se obter o node "from"
+ * @return "Node" node associado como "from" no edge
+*/
+Node getFromNode(Graph g, Edge e);
 
 /*
+ * Retorna o node "to" associado a uma aresta
+ * @param "Graph" grafo que o edge está associado
+ * @param "e" edge que deseja-se obter o node "to"
+ * @return "Node" associado como "to" no edge
  */
-// Node getToNode(g, e);
+Node getToNode(Graph g, Edge e);
 
 /*
+ * Retorna a iformação associada a uma aresta
+ * @param "Graph" grafo que a aresta está associada
+ * @param "e" edge que deseja-se obter a informação
+ * @return "Info" a informação associada ao edge
  */
-// Info getEdgeInfo(g, e);
+Info getEdgeInfo(Graph g, Edge e);
 
 /*
+ * Define a informação associada a um edge 
+ * @param "Graph" grafo que a aresta está associada
+ * @param "e" edge que deseja-se definir a informação
+ * @param "info" nova informação que será associado ao edge
  */
-// void setEdgeInfo(g, e, info);
+void setEdgeInfo(Graph g, Edge e, Info info);
 
 /*
  */
@@ -156,6 +211,8 @@ void killDG(Graph g);
  **********************
  * SUB-GRAFOS
  **********************
+*/
+
 /*
     Calcula o subgrafo composto  pelos vertices cujos nomes estao no vetor nomesVerts
 (nVerts e' o tamanho deste vetor). Caso comAresta seja true calcula o subgrafo
