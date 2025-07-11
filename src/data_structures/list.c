@@ -76,6 +76,24 @@ ListNode list_insert_end(List lst, ListValue value) {
     return new_node_ptr;
 }
 
+struct list_copy_items_data_st {
+    List target_list; 
+}; 
+
+static void list_copy_items(void *value, callback_data call_data) {
+    ListValue list_item = value; 
+    struct list_copy_items_data_st *data = call_data; 
+
+    list_insert(data->target_list, list_item); 
+}
+
+void list_copy(List source, List target) {
+    assert(source);
+    assert(target);
+    struct list_copy_items_data_st data = {.target_list = target}; 
+    list_foreach(source, &list_copy_items, &data);
+}
+
 ListValue list_remove(List lst) {
     assert(lst); 
 
@@ -93,6 +111,41 @@ ListValue list_remove(List lst) {
     free(temp); 
 
     return temp_value; 
+}
+
+ListValue list_remove_value(List lst, void *value, compare compare_fn) {
+    assert(lst); 
+    assert(compare_fn); 
+
+    List_st *list = (List_st *) lst; 
+    if (list == NULL) return NULL;
+    
+    ListNode_st *previous = NULL; 
+    ListNode_st *current = (ListNode_st *) list->head;
+    while (current != NULL) {
+        if (compare_fn(current->value, value)) {
+            if (previous == NULL) {
+                list->head = current->next; 
+            } else {
+                previous->next = current->next; 
+            }
+            
+            break; 
+        }
+
+        previous = current; 
+        current = (ListNode_st *) current->next; 
+    }
+
+    if (current != NULL) {
+        ListValue temp = current->value;
+        free(current);
+        list->size--; 
+        return temp; 
+    }
+    
+    return NULL; 
+
 }
 
 ListValue list_search(List lst, void *value, compare compare_fn) {

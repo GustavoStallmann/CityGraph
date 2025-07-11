@@ -34,6 +34,13 @@ ListNode list_insert(List list, ListValue value);
  */
 ListNode list_insert_end(List list, ListValue value);
 
+/*
+ * Copy list items from the source to the target
+ * @param source the source of items to copy
+ * @param target the list of items destiny
+*/
+void list_copy(List source, List target); 
+
 /* 
  * Remove the last value of a list
  * The user is responsible to free the ListValue
@@ -41,6 +48,16 @@ ListNode list_insert_end(List list, ListValue value);
  * @return ListValue the removed value
 */
 ListValue list_remove(List list);
+
+/*
+ * Remove the value once the comparison function returns true
+ * The user is responsible to free the value
+ * @param list the list to remove the value
+ * @param value the value to be removed
+ * @param compare the function for values comparison
+ * @return ListValue the value removed from the list
+*/
+ListValue list_remove_value(List list, void *value, compare f);
 
 /* 
  * Search for a value on the given list
