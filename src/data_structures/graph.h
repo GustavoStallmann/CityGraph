@@ -26,6 +26,7 @@ A documentacao deste modulo deve ser melhorada.
 
 #include <stdbool.h>
 #include <string.h>
+#include "list.h"
 
 typedef void *Graph;
 typedef int Node;
@@ -153,23 +154,34 @@ Info getEdgeInfo(Graph g, Edge e);
 /*
  * Define a informação associada a um edge 
  * @param "Graph" grafo que a aresta está associada
- * @param "e" edge que deseja-se definir a informação
+ * @param "Edge" edge que deseja-se definir a informação
  * @param "info" nova informação que será associado ao edge
  */
 void setEdgeInfo(Graph g, Edge e, Info info);
 
 /*
+ * Remove uma edge associada ao grafo
+ * @param "Graph" grafo que a aresta está associada
+ * @param "Edge" edge que será removida
  */
 void removeEdge(Graph g, Edge e);
 
 /*
+ * Veifica se dois nodes são adjacentes
+ * @param "Graph" grafo que os nodes estão associados
+ * @param "from" node inicial da associação
+ * @param "to" node de destino da associação
+ * @return "bool" verdadeiro se forem adjacentes, falso caso contrário
  */
 bool isAdjacent(Graph g, Node from, Node to);
 
 /*
-   Adiciona 'a lista "nosAdjacentes" os nos adjacentes 'a "node".
+ * Copia a lista de adjacencia do node para a lista de destino
+ * @param "Graph" grafo que o node está associado
+ * @param "node" nó que deseja-se copiar a lista de adjacentes
+ * @param "nosAdjacentes" lista de destino 
  */
-// void adjacentNodes(g, node, nosAdjacentes);
+void adjacentNodes(Graph g, Node node, List nosAdjacentes);
 
 /*
    Adiciona 'a lista "arestaAdjacentes" as arestas (x,y), tal que,
