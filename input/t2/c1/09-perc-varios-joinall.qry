@@ -1,0 +1,20 @@
+@o? R1 b08.8 N 43
+@o? R2 b01.1 L 69
+p? smp_0_ida - R1 R2
+@o? R1 b09.1 L 24
+@o? R2 b09.10 N 105
+p? smp_1_ida - R1 R2
+@o? R1 b02.9 S 44
+@o? R2 b05.1 L 68
+p? smp_2_ida - R1 R2
+@o? R1 b04.10 O 32
+@o? R2 b09.1 L 44
+p? smp_3_ida - R1 R2
+@o? R1 b02.3 L 25
+@o? R2 b08.10 S 90
+p? smp_4_ida - R1 R2
+join prc smp_0_ida smp_1_ida
+join prc prc smp_2_ida
+join prc prc smp_3_ida
+join prc prc smp_4_ida
+shw prc #aa00d4 #2ca04f

@@ -1,0 +1,15 @@
+sg sg_1 -30.00 -30.00 1060.00 238.00
+sg sg_2 1030.00 446.00 1590.00 238.00
+sg sg_3 -30.00 684.00 1060.00 238.00
+@o? R1 b01.4 N 2
+@o? R3 b01.6 N 84
+p? psg_ida sg_1 R1 R3
+@o? R1 b05.8 O 59
+@o? R3 b06.9 S 42
+p? psg_ida sg_2 R1 R3
+@o? R1 b08.3 N 13
+@o? R3 b08.7 S 54
+p? psg_ida sg_3 R1 R3
+join prcsubs psg_ida psg_ida
+join prcsubs prcsubs psg_ida
+shw prcsubs #aa00d4 #2ca04f

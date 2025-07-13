@@ -1,0 +1,8 @@
+@o? R1 b02.8 S 85
+@o? R2 b010.4 S 20
+p? prc_0 - R1 R2
+@o? R2 b04.2 L 54
+p? prc_1 - R2 R1
+@o? R2 b010.10 O 52
+p? prc_2 - R1 R2
+shw prc_0 #aa00d4 #2ca04f

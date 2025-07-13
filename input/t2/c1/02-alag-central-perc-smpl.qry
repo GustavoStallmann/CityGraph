@@ -1,0 +1,5 @@
+alag 10 780.00 386.67 780.00 386.67
+@o? R1 b06.9 O 12
+@o? R2 b02.1 O 7
+p? prc_ida - R1 R2
+shw prc #aa00d4 #2ca04f

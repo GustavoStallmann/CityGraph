@@ -1,0 +1,10 @@
+@o? R1 B30-24.17 L 18
+@o? R2 B44-13.4 S 1
+p? prc_0 - R1 R2
+@o? R2 B31-26.14 O 26
+p? prc_1 - R2 R1
+@o? R2 B44-2.18 O 69
+p? prc_2 - R1 R2
+join prc prc_0 prc_1
+join prc prc prc_2
+shw prc #aa00d4 #2ca04f

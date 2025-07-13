@@ -1,0 +1,20 @@
+@o? R1 B40-1.5 O 78
+@o? R2 B44-3.7 N 17
+p? smp_0_ida - R1 R2
+@o? R1 B44-1.11 L 54
+@o? R2 B41-7.7 S 95
+p? smp_1_ida - R1 R2
+@o? R1 B44-5.8 O 29
+@o? R2 B30-14.13 S 38
+p? smp_2_ida - R1 R2
+@o? R1 B41-5.6 L 72
+@o? R2 B44-9.11 S 100
+p? smp_3_ida - R1 R2
+@o? R1 B43-10.5 L 59
+@o? R2 B40-9.1 O 30
+p? smp_4_ida - R1 R2
+join prc smp_0_ida smp_1_ida
+join prc prc smp_2_ida
+join prc prc smp_3_ida
+join prc prc smp_4_ida
+shw prc #aa00d4 #2ca04f

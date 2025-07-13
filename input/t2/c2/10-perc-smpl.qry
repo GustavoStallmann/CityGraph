@@ -1,0 +1,91 @@
+sg sg_1 -30.00 -30.00 2815.71 209.71
+sg sg_2 4193.57 -30.00 2815.71 209.71
+sg sg_3 8417.14 -30.00 2815.71 209.71
+sg sg_4 2785.71 389.41 4223.57 209.71
+sg sg_5 -30.00 599.12 2815.71 209.71
+sg sg_6 4193.57 599.12 2815.71 209.71
+sg sg_7 8417.14 599.12 2815.71 209.71
+sg sg_8 2785.71 1018.53 4223.57 209.71
+sg sg_9 -30.00 1228.24 2815.71 209.71
+sg sg_10 4193.57 1228.24 2815.71 209.71
+sg sg_11 8417.14 1228.24 2815.71 209.71
+sg sg_12 2785.71 1647.65 4223.57 209.71
+sg sg_13 -30.00 1857.35 2815.71 209.71
+sg sg_14 4193.57 1857.35 2815.71 209.71
+sg sg_15 8417.14 1857.35 2815.71 209.71
+sg sg_16 2785.71 2276.76 4223.57 209.71
+sg sg_17 -30.00 2486.47 2815.71 209.71
+sg sg_18 4193.57 2486.47 2815.71 209.71
+sg sg_19 8417.14 2486.47 2815.71 209.71
+sg sg_20 2785.71 2905.88 4223.57 209.71
+sg sg_21 -30.00 3115.59 2815.71 209.71
+sg sg_22 4193.57 3115.59 2815.71 209.71
+sg sg_23 8417.14 3115.59 2815.71 209.71
+@o? R1 B31-4.13 O 43
+@o? R3 B31-3.12 L 29
+p? psg_ida sg_4 R1 R3
+@o? R1 B30-6.5 O 24
+@o? R3 B30-6.2 S 38
+p? psg_ida sg_5 R1 R3
+@o? R1 B32-6.15 L 39
+@o? R3 B32-6.6 O 24
+p? psg_ida sg_6 R1 R3
+@o? R1 B32-11.6 N 19
+@o? R3 B31-11.12 O 33
+p? psg_ida sg_8 R1 R3
+@o? R1 B30-13.10 N 18
+@o? R3 B30-13.15 N 86
+p? psg_ida sg_9 R1 R3
+@o? R1 B32-13.16 N 17
+@o? R3 B32-14.10 N 23
+p? psg_ida sg_10 R1 R3
+@o? R1 B32-18.9 L 19
+@o? R3 B32-19.11 O 57
+p? psg_ida sg_12 R1 R3
+@o? R1 B30-20.2 L 46
+@o? R3 B30-20.11 S 26
+p? psg_ida sg_13 R1 R3
+@o? R1 B32-20.15 S 61
+@o? R3 B32-20.7 S 11
+p? psg_ida sg_14 R1 R3
+@o? R1 B42-2.9 O 72
+@o? R3 B41-2.9 N 14
+p? psg_ida sg_16 R1 R3
+@o? R1 B40-4.3 S 80
+@o? R3 B40-4.12 N 80
+p? psg_ida sg_17 R1 R3
+@o? R1 B43-4.2 O 28
+@o? R3 B42-4.12 O 61
+p? psg_ida sg_18 R1 R3
+@o? R1 B44-4.8 N 20
+@o? R3 B44-4.4 O 65
+p? psg_ida sg_19 R1 R3
+@o? R1 B42-8.6 N 100
+@o? R3 B43-8.4 N 2
+p? psg_ida sg_20 R1 R3
+@o? R1 B40-10.2 L 75
+@o? R3 B41-10.3 S 31
+p? psg_ida sg_21 R1 R3
+@o? R1 B42-10.11 L 1
+@o? R3 B42-10.12 N 23
+p? psg_ida sg_22 R1 R3
+@o? R1 B44-10.12 S 47
+@o? R3 B44-10.7 L 58
+p? psg_ida sg_23 R1 R3
+join prcsubs psg_ida psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+join prcsubs prcsubs psg_ida
+shw prcsubs #aa00d4 #2ca04f

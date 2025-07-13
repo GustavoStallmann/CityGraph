@@ -1,0 +1,8 @@
+@o? R1 b06.9 O 12
+@o? R2 b02.1 O 7
+p? prc_ida - R1 R2
+@o? R1 b03.10 O 54
+@o? R2 b010.1 L 28
+p? prc2_ida - R1 R2
+join joined prc_ida prc2_ida
+shw joined #aa00d4 #2ca04f

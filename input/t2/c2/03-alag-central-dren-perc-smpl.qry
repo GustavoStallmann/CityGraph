@@ -1,0 +1,6 @@
+alag 10 3275.00 1178.33 3275.00 1178.33
+dren 10
+@o? R1 B41-6.3 N 20
+@o? R2 B44-9.4 L 37
+p? prc_ida - R1 R2
+shw prc #aa00d4 #2ca04f

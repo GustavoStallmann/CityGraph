@@ -1,0 +1,8 @@
+@o? R1 B31-8.12 N 50
+@o? R2 B31-5.16 N 78
+p? prc_0 - R1 R2
+@o? R2 B30-2.11 S 10
+p? prc_1 - R2 R1
+@o? R2 B31-10.10 O 45
+p? prc_2 - R1 R2
+shw prc_0 #aa00d4 #2ca04f
