@@ -76,22 +76,18 @@ ListNode list_insert_end(List lst, ListValue value) {
     return new_node_ptr;
 }
 
-struct list_copy_items_data_st {
-    List target_list; 
-}; 
-
 static void list_copy_items(void *value, callback_data call_data) {
     ListValue list_item = value; 
-    struct list_copy_items_data_st *data = call_data; 
+    List *destination_list = (List *) call_data; 
 
-    list_insert(data->target_list, list_item); 
+    list_insert(destination_list, list_item); 
 }
 
 void list_copy(List source, List target) {
     assert(source);
     assert(target);
-    struct list_copy_items_data_st data = {.target_list = target}; 
-    list_foreach(source, &list_copy_items, &data);
+
+    list_foreach(source, &list_copy_items, &target);
 }
 
 ListValue list_remove(List lst) {
