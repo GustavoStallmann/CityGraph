@@ -273,3 +273,48 @@ bool isAdjacent(Graph g, Node from, Node to) {
     if (from_node == NULL || to_node == NULL) return false;
     return list_search(from_node->adjacencies, to_node, list_compare_adjacency);
 }
+
+void adjacentEdges(Graph g, Node node, List arestasAdjacentes) {
+    assert(g);
+    assert(node);
+    assert(arestasAdjacentes);
+
+    Graph_st *graph = (Graph_st *) g; 
+    Node_st *from_node = (Node_st *) dict_get(graph, (int) node); 
+    if (from_node == NULL || from_node->adjacencies == NULL) return; 
+
+    list_copy(from_node->adjacencies, arestasAdjacentes);
+}
+
+void getNodeNames(Graph g, List nomesNodes) {
+    assert(g);
+    assert(nomesNodes);
+
+    Graph_st *graph = (Graph_st *) g; 
+    for (int i = 0; i < dict_get_size(graph->vertexes_dict); i++) {
+        if (dict_is_empty(graph->vertexes_dict, i)) continue;
+
+        Node_st *node = (Node_st *) dict_get(graph->vertexes_dict, i); 
+        if (node == NULL || node->name) continue; 
+
+        char *copy_name = alloc_str(node->name);
+        if (copy_name == NULL) continue; 
+
+        list_insert_end(nomesNodes, copy_name);
+    }
+}
+
+void getEdges(Graph g, List arestas) {
+    assert(g); 
+    assert(arestas); 
+
+    Graph_st *graph = (Graph_st *) g; 
+    for (int i = 0; i < dict_get_size(graph->vertexes_dict); i++) {
+        if (dict_is_empty(graph->vertexes_dict, i)) continue;
+
+        Node_st *node = (Node_st *) dict_get(graph->vertexes_dict, i); 
+        if (node == NULL || node->adjacencies == NULL) continue; 
+
+        list_copy(node->adjacencies, arestas);
+    }
+}

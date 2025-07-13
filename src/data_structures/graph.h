@@ -37,12 +37,12 @@ typedef void *Info;
   Invocado quando uma aresta é "descoberta"/"percorrida"/"classificada".
   Tambem informa os tempos de descoberta e finalizacao
  */
-// bool (*procEdge)(Graph g, Edge e, void *td,void *tf, void *extra);
+typedef bool (*procEdge)(Graph g, Edge e, void *td,void *tf, void *extra);
 
 /*
   Invocado quando percurso e' recomecado
  */
-// bool (*dfsRestarted)(Graph g, void *extra);
+typedef bool (*dfsRestarted)(Graph g, void *extra);
 
 /*
  * Cria uma nova instancia de grafo
@@ -184,20 +184,26 @@ bool isAdjacent(Graph g, Node from, Node to);
 void adjacentNodes(Graph g, Node node, List nosAdjacentes);
 
 /*
-   Adiciona 'a lista "arestaAdjacentes" as arestas (x,y), tal que,
-   x == node.
+ * Insere na lista dada as arestas (x, y), tal que x == node
+ * @param "Graph" grafo cujo nó está associado
+ * @param "Node" nó de início da aresta
+ * @param "List" lista que será inserida as arestas
  */
-// void adjacentEdges(g, node, Lista arestasAdjacentes);
+void adjacentEdges(Graph g, Node node, List arestasAdjacentes);
 
 /*
-   Insere na lista "nomesNodes" os nomes atribuidos aos nos do grafo.
+ * Insere na lista "nomesNodes" os nomes atribuidos aos nos do grafo.
+ * @param "Graph" grafo que deseja-se obter o nome dos nodes
+ * @param "List" lista de destino dos nomes
  */
-// void  getNodeNames(Graph g, Lista nomesNodes);
+void getNodeNames(Graph g, List nomesNodes);
 
 /*
-   Insere na lista "arestas", as arestas de g.
+ * Insere na lista "arestas", as arestas de g.
+ * @param "Graph" grafo que deseja-se obter a lista de arestas
+ * @param "List" lista de destino das arestas
  */
-// void getEdges(g, Lista arestas);
+void getEdges(Graph g, List arestas);
 
 /*
    Faz percurso em profundidade sobre  g, a partir do no' node, classificando
@@ -205,7 +211,7 @@ void adjacentNodes(Graph g, Node node, List nosAdjacentes);
       A busca em profundidade, eventualmente, pode produzir uma floresta.
    newTree e' invocada sempre que o percurso for retomado.
  */
-// bool dfs(g, node, procEdge treeEdge, forwardEdge, returnEdge,
+// bool dfs(Graph g, Node node, procEdge treeEdge, forwardEdge, returnEdge,
 // 	 crossEdge, newTree, void *extra);
 
 /*
