@@ -80,7 +80,7 @@ static void list_copy_items(void *value, callback_data call_data) {
     ListValue list_item = value; 
     List *destination_list = (List *) call_data; 
 
-    list_insert(destination_list, list_item); 
+    list_insert(*destination_list, list_item); 
 }
 
 void list_copy(List source, List target) {
