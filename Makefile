@@ -1,8 +1,8 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -fstack-protector-all
+CFLAGS = -Wall -Wextra -std=c99 -fstack-protector-all -g
 SRC_DIR = src
 OBJ_DIR = output
-RESULT_DIR = /home/stallmarch/projects/uel/ed2/project/result
+RESULT_DIR = /home/stallmarch/projects/uel/CityGraph/result
 PROJECT_PATH := $(shell pwd)
 
 # Find all .c files in the source directory and subdirectories
@@ -34,7 +34,10 @@ clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 	rm -rf ${RESULT_DIR}
 
-test:
-	./${TARGET}
+run:
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo"
 
-.PHONY: all clean test
+debug:
+	valgrind --leak-check=full ./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo"
+
+.PHONY: all clean test debug
