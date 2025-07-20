@@ -6,13 +6,12 @@ typedef void *Circle;
 
 /*
  * Create a new circle form
- * @param id the id of the circle
  * @param x the horizontal coordinate 
  * @param y the vertical coordinate 
  * @param r the radius of the circle
  * @return the new circle
  */
-Circle new_circle(int id, double x, double y, double r, FormStyle style);
+Circle new_circle(double x, double y, double r, FormStyle style);
 
 /*
  * Sets the minimum bounding box of the form in the given variables
@@ -48,13 +47,6 @@ FormStyle get_circle_style(Circle c);
  * @return the state of the circle
  */
 FormState get_circle_state(Circle c);
-
-/* 
- * Gets the id of the circle
- * @param c the form to get the id
- * @return the id of the circle
- */
-int get_circle_id(Circle c); 
 
 /* 
  * Gets the distance for displacement calculation

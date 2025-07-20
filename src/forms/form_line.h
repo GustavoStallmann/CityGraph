@@ -7,14 +7,13 @@ typedef void *Line;
 
 /*
  * Create a new line form
- * @param i the id of the line
  * @param x the first point horizontal coordinate
  * @param y the first point vertical coordinate 
  * @param x2 the second point horizontal coordinate
  * @param y2 the second point vertical coordinate
  * @return the new line
 */
-Line new_line(int i, double x, double y, double x2, double y2, FormStyle style);
+Line new_line(double x, double y, double x2, double y2, FormStyle style);
 
 /*
  * Sets the minimum bounding box of the form in the given variables
@@ -50,13 +49,6 @@ FormState get_line_state(Line l);
  * @return the style of the line
 */
 FormStyle get_line_style(Line l); 
-
-/* 
- * Gets the id of the line
- * @param l the form to get the id
- * @return the id of the line
-*/
-int get_line_id(Line l); 
 
 /* 
  * Gets the distance for displacement calculation

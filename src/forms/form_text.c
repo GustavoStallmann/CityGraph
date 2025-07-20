@@ -7,7 +7,6 @@
 #include "form_style.h"
 
 typedef struct {
-    int id; 
     char *str; 
     double x, y;
     FormStyle style;
@@ -40,23 +39,13 @@ void text_transp(Text t, double x, double y) {
     text->y = y; 
 }
 
-int get_text_id(Text t) {
-    assert(t); 
-
-    Text_st *text = (Text_st *) t; 
-    if (text == NULL) return -1; 
-
-    return text->id; 
-}
-
-Text new_text(int id, double x, double y, char *str, FormStyle style) {
+Text new_text(double x, double y, char *str, FormStyle style) {
     Text_st *text = (Text_st *) malloc(sizeof(Text_st)); 
     if (text == NULL) {
         fprintf(stderr, "(ERROR) form_text: insufficient memory to alloc text form");
         return NULL;
     }
 
-    text->id = id; 
     text->x = x; 
     text->y = y; 
     text->style = style;

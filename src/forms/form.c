@@ -14,9 +14,10 @@
 typedef struct {
     FormType form_type; 
     void *form_instance; 
+    int id; 
 } Form_st; 
 
-static FormType form_get_type(Form f) {
+FormType form_get_type(Form f) {
     Form_st *form = (Form_st *) f; 
     return form->form_type; 
 }
@@ -37,16 +38,16 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
     
     switch (tp) {
         case CIRCLE: 
-            form->form_instance = new_circle(id, x, y, wr, style);
+            form->form_instance = new_circle(x, y, wr, style);
             break;
         case RECT: 
-            form->form_instance = new_rect(id, x, y, wr, h, style);
+            form->form_instance = new_rect(x, y, wr, h, style);
             break;
         case LINE: 
-            form->form_instance = new_line(id, x, y, wr, h, style); 
+            form->form_instance = new_line(x, y, wr, h, style); 
             break;
         case TEXT: 
-            form->form_instance = new_text(id, x, y, text, style);
+            form->form_instance = new_text(x, y, text, style);
             break;
         default:
             fprintf(stderr, "[form] Error: got an undefined form type to creation"); 
@@ -59,12 +60,12 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
         free(form); 
         return NULL; 
     }
-        
+    form->id = id; 
     form->form_type = tp; 
     return form; 
 }
 
-void get_form_bounding_box(Form form, double *x, double *y, double *w, double *h) {
+void form_get_bounding_box(Form form, double *x, double *y, double *w, double *h) {
     assert(form); 
 
     FormType form_type = form_get_type(form);
@@ -91,7 +92,7 @@ void get_form_bounding_box(Form form, double *x, double *y, double *w, double *h
     }
 }
 
-FormStyle get_form_style(Form form) {
+FormStyle form_get_style(Form form) {
     assert(form); 
     
     FormType form_type = form_get_type(form);
@@ -114,7 +115,7 @@ FormStyle get_form_style(Form form) {
     }
 }
 
-void get_form_coordinates(Form form, double *x, double *y) {
+void form_get_coordinates(Form form, double *x, double *y) {
     assert(form); 
     
     FormType form_type = form_get_type(form);
@@ -141,7 +142,7 @@ void get_form_coordinates(Form form, double *x, double *y) {
     }
 }
 
-void get_form_dimensions(Form form, double *w, double *h) {
+void form_get_dimensions(Form form, double *w, double *h) {
     assert(form); 
     
     FormType form_type = form_get_type(form);
@@ -169,7 +170,7 @@ void get_form_dimensions(Form form, double *w, double *h) {
     }
 }
 
-FormState get_form_state(Form form) {
+FormState form_get_state(Form form) {
     assert(form); 
     
     FormType form_type = form_get_type(form);
@@ -192,30 +193,23 @@ FormState get_form_state(Form form) {
     }
 }
 
-int get_form_id(Form form) {
-    assert(form); 
-    
-    FormType form_type = form_get_type(form);
-    void *form_instance = form_get_instance(form);
-    if (form_instance == NULL) return -1; 
+int form_get_id(Form f) {
+    assert(f); 
 
-    switch (form_type) {
-        case CIRCLE:
-            return get_circle_id((Circle) form_instance);
-        case RECT: 
-            return get_rect_id((Rect) form_instance);
-        case TEXT:
-            return get_text_id((Text) form_instance);
-        case LINE: 
-            return get_line_id((Line) form_instance);
-        
-        default:
-            fprintf(stderr, "[form] Error: invalid form provided to get id");
-            return -1;
-    }
+    Form_st *form = (Form_st *) f; 
+    return form->id; 
 }
 
-void transp_form(Form form, double x, double y) {
+char* form_get_text(Form f) {
+    assert(f); 
+
+    FormType form_type = form_get_type(f); 
+    if (form_type != TEXT) return NULL; 
+
+    return get_text_string((Text) f);     
+}
+
+void form_transp(Form form, double x, double y) {
     assert(form); 
     
     FormType form_type = form_get_type(form);
@@ -241,7 +235,7 @@ void transp_form(Form form, double x, double y) {
     }
 }
 
-char* get_form_name(Form form) {
+char* form_get_name(Form form) {
     assert(form); 
     
     FormType form_type = form_get_type(form);
@@ -259,7 +253,7 @@ char* get_form_name(Form form) {
     }
 }
 
-void free_form(Form form) {
+void form_free(Form form) {
     assert(form); 
     
     FormType form_type = form_get_type(form);

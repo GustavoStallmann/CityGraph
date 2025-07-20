@@ -7,13 +7,12 @@ typedef void *Text;
 
 /*
  * Create a new text form
- * @param id the id of the text
  * @param x the horizontal coordinate 
  * @param y the vertical coordinate 
  * @param text the text of the form
  * @return the new text
 */
-Text new_text(int id, double x, double y, char *text, FormStyle style);
+Text new_text(double x, double y, char *text, FormStyle style);
 
 /*
  * Sets the minimum bounding box of the form in the given variables
@@ -35,13 +34,6 @@ void get_text_positions(Text t, double *x, double *y);
  * @return the state of the text
 */
 FormState get_text_state(Text t);
-
-/* 
- * Gets the id of the text
- * @param t the form to get the id
- * @return the id of the text
-*/
-int get_text_id(Text t);
 
 /* 
  * Gets the style of the text

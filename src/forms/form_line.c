@@ -8,20 +8,18 @@
 #include "form_style.h"
 
 typedef struct {
-    int id; 
     double x, y, x2, y2; 
     FormStyle style;
     FormState state;
 } Line_st; 
 
-Line new_line(int id, double x, double y, double x2, double y2, FormStyle style) {
+Line new_line(double x, double y, double x2, double y2, FormStyle style) {
     Line_st *line = (Line_st *) malloc(sizeof(Line_st)); 
     if (line == NULL) {
         fprintf(stderr, "(ERROR) form_line: insufficient memory to alloc line");
         return NULL;
     }
 
-    line->id = id; 
     line->x = x;
     line->y = y; 
     line->x2 = x2; 
@@ -73,15 +71,6 @@ void line_transp(Line l, double x, double y) {
     line->y += offset_y;
     line->x2 += offset_x;
     line->y2 += offset_y;
-}
-
-int get_line_id(Line l) {
-    assert(l); 
-
-    Line_st *line = (Line_st *) l; 
-    if (line == NULL) return -1; 
-
-    return line->id; 
 }
 
 FormStyle get_line_style(Line l) {

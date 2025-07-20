@@ -6,20 +6,18 @@
 #include "form_style.h"
 
 typedef struct {
-    int id; 
     double x, y, w, h; 
     FormStyle style;
     FormState state; 
 } Rect_st;
 
-Rect new_rect(int id, double x, double y, double w, double h, FormStyle style) {
+Rect new_rect(double x, double y, double w, double h, FormStyle style) {
     Rect_st *rect = (Rect_st *) malloc(sizeof(Rect_st)); 
     if (rect == NULL) {
         fprintf(stderr, "(ERROR) form_rect: insufficient memory for rectangle form allocation");
         return NULL; 
     }
 
-    rect->id = id; 
     rect->x = x; 
     rect->y = y; 
     rect->w = w; 
@@ -38,15 +36,6 @@ void rect_transp(Rect r, double x, double y) {
 
     rect->x = x; 
     rect->y = y; 
-}
-
-int get_rect_id(Rect r) {
-    assert(r); 
-
-    Rect_st *rect = (Rect_st *) r; 
-    if (rect == NULL) return -1; 
-
-    return rect->id; 
 }
 
 void get_rect_bounding_box(Rect r, double *x, double *y, double *w, double *h) {

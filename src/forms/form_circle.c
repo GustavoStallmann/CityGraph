@@ -11,13 +11,12 @@
 #include "form_style.h"
 
 typedef struct {
-    int id; 
     double x, y, r; 
     FormStyle style;
     FormState state;
 } Circle_st; 
 
-Circle new_circle(int id, double x, double y, double r, FormStyle style) {
+Circle new_circle(double x, double y, double r, FormStyle style) {
     Circle_st *circle = (Circle_st *) malloc(sizeof(Circle_st)); 
     if (circle == NULL) {
         fprintf(stderr, "(ERROR) form_circle:insufficient memory to alloc circle");
@@ -31,7 +30,6 @@ Circle new_circle(int id, double x, double y, double r, FormStyle style) {
         return NULL;
     }
 
-    circle->id = id; 
     circle->x = x; 
     circle->y = y; 
     circle->r = r;
@@ -39,15 +37,6 @@ Circle new_circle(int id, double x, double y, double r, FormStyle style) {
     circle->state = new_form_state();
 
     return circle; 
-}
-
-int get_circle_id(Circle c) {
-    assert(c); 
-
-    Circle_st *circle = (Circle_st *) c; 
-    if (circle == NULL) return -1; 
-
-    return circle->id; 
 }
 
 void get_circle_bounding_box(Circle c, double *x, double *y, double *w, double *h) {

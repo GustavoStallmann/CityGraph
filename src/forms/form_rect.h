@@ -12,7 +12,7 @@ typedef void *Rect;
  * @param r the radius of the Rect
  * @return the new Rect
 */
-Rect new_rect(int id, double x, double y, double w, double h, FormStyle style);
+Rect new_rect(double x, double y, double w, double h, FormStyle style);
 
 /*
  * Sets the minimum bounding box of the form in the given variables
@@ -48,13 +48,6 @@ void rect_transp(Rect r, double x, double y);
  * @return the state of the Rect
 */
 FormState get_rect_state(Rect r);
-
-/* 
- * Gets the id of the Rect
- * @param r the form to get the id
- * @return the id of the Rect
-*/
-int get_rect_id(Rect r); 
 
 /* 
  * Gets the distance for displacement calculation
