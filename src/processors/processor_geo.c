@@ -5,9 +5,11 @@
 #include "processor_dir.h"
 #include "../data_structures/list.h" 
 #include "../forms/form_style.h" 
+#include "../city/block.h"
 #include "../utils/file.h"
 
 #define MAX_LINE_LENGTH 512 
+#define ARG_SIZE 20
 
 static bool process_command(char *line_buffer, char *command_type) {
     if (sscanf(line_buffer, "%9s", command_type) == 0) {
@@ -20,7 +22,47 @@ static bool process_command(char *line_buffer, char *command_type) {
     return true; 
 }
 
-static List geo_execute(FILE *geo_file) {
+static FormStyle process_cq(char *line_buffer) {
+    char border_size[ARG_SIZE] = {0}, fill_color[ARG_SIZE] = {0}, border_color[ARG_SIZE] = {0};
+    int parsed = sscanf(line_buffer, "%*s %s %s %s", border_size, fill_color, border_color);
+    if (parsed != 3) {
+        fprintf(stderr, "(processor_geo) Error: couldn't parse cq parameters from line: %s\n", line_buffer);
+        return NULL;
+    }
+
+    FormStyle ts = new_form_style(border_color, fill_color, NULL, NULL, NULL, NULL, border_size);
+    if (ts == NULL) {
+        fprintf(stderr, "(processor_geo) Error: couldn't create cq style");
+        return NULL; 
+    }
+    return ts; 
+}
+
+static Block process_block(char *line_buffer, FormStyle style) {
+    char block_name[ARG_SIZE] = {0};
+    double x = 0.0f, y = 0.0f, w = 0.0f, h = 0.0f; 
+    int parsed = sscanf(line_buffer, "%*s %s %lf %lf %lf %lf", block_name, &x, &y, &w, &h); 
+    if (parsed != 5) {
+        fprintf(stderr, "(processor_geo) Error: couldn't parse block parameter from line: %s\n", line_buffer);
+        return NULL; 
+    }
+
+    FormStyle form_style = new_form_style(
+        get_form_style_border_color(style), get_form_style_fill_color(style), 
+        NULL, NULL, NULL, NULL, get_form_style_stroke_width(style)
+    );
+    Form rect = new_form(RECT, -1, x, y, w, h, NULL, form_style); 
+    Block block = new_block(block_name, rect); 
+    if (rect == NULL || block == NULL || form_style == NULL) {
+        fprintf(stderr, "(processor_geo) Error: couldn't create block from line %s\n", line_buffer);
+        return NULL;
+    }
+
+    return block; 
+}
+
+
+static List geo_process_commands(FILE *geo_file) {
     assert(geo_file);
 
     char line_buffer[MAX_LINE_LENGTH]; 
@@ -32,25 +74,31 @@ static List geo_execute(FILE *geo_file) {
         return NULL; 
     }
 
-    FormStyle actual_font_style = new_form_style("#ffffff", "#ffffff", "Arial", "normal", "start", "12px", "1");
+    FormStyle actual_block_style = new_form_style("#ffffff", "#ffffff", NULL, NULL, NULL, NULL, "1px");
     while (fgets(line_buffer, sizeof(line_buffer), geo_file) != NULL) {
-        if (process_command(line_buffer, command_type) == false) continue;
+        if (!process_command(line_buffer, command_type)) continue;
 
-        // FormInfo form = process_form(command_type, line_buffer, &actual_font_style); 
-        // if (form == NULL && strcmp(command_type, "ts") != 0) {
-        //     fprintf(stderr, "ERROR: processor_geo couldn't process the form %s\n", command_type); 
-        //     continue; 
-        // }
+        Block block = NULL; 
+        if (strcmp(command_type, "cq" ) == 0) {
+            if (actual_block_style != NULL) {
+                free_form_style(actual_block_style);
+            }
+            actual_block_style = process_cq(line_buffer);
+        } else if (strcmp(command_type, "q" ) == 0) {
+            block = process_block(line_buffer, actual_block_style);
+        } else {
+            fprintf(stderr, "(processor_geo) Error: invalid command on line %s\n", line_buffer);
+        }
 
-        // if (form == NULL) continue; 
-        
-        // if (list_insert_end(form_list, form) == NULL) {
-        //     fprintf(stderr, "ERROR: processor_geo couldn't add the form to the list\n"); 
-        //     free_form_info(form);
-        // }	
+        if (block == NULL) continue;
+
+        if (list_insert_end(form_list, block) == NULL) {
+            fprintf(stderr, "ERROR: processor_geo couldn't add the form to the list\n"); 
+            block_free(block);
+        }	
     }
 
-    free_form_style(actual_font_style);
+    free_form_style(actual_block_style);
     return form_list;
 }
 
@@ -67,7 +115,7 @@ List geo_process(Dir dir) {
         return NULL; 
     }
 
-    List form_list = geo_execute(geo_file);     
+    List form_list = geo_process_commands(geo_file);     
     file_close(geo_file);
     return form_list; 
 }
