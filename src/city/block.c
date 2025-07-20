@@ -19,7 +19,7 @@ static char* alloc_str(char *str) {
     return new_str;
 }
 
-Block block_new(char *name, Form block_form) {
+Block new_block(char *name, Form block_form) {
     assert(name);
     assert(block_form); 
     char *alloc_name = alloc_str(name); 
@@ -46,4 +46,23 @@ void block_set_name(Block b, char *name) {
     if (new_name == NULL) return; 
 
     block->name = new_name; 
+}
+
+Form block_get_form(Block b) {
+    assert(b); 
+    
+    Block_st *block = (Block_st *) b;
+    if (block->block_form == NULL) return NULL; 
+
+    return block->block_form; 
+}
+
+void block_free(Block b) {
+    assert(b);
+
+    Block_st *block = (Block_st *) b;
+    if (block->name != NULL) {
+        free(block->name);
+    }
+    free(b); 
 }

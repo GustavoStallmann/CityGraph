@@ -15,7 +15,7 @@ typedef void *Block;
  * @param "block_form" the form instance for the block
  * @return "Block" the new instance of Block
 */
-Block block_new(char *name, Form block_form); 
+Block new_block(char *name, Form block_form); 
 
 /*
  * Define a name of the given block instance
@@ -23,3 +23,16 @@ Block block_new(char *name, Form block_form);
  * @param "name" the name to the block
 */
 void block_set_name(Block block, char *name); 
+
+/* 
+ * Get the form of the given block
+ * @param "Block" the block to get the form
+ * @return "Form" the form of the block
+*/
+Form block_get_form(Block b);
+
+
+/*
+ * Free the given form
+ */
+void block_free(Block b);
