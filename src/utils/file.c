@@ -4,7 +4,7 @@
 #include <string.h>
 #include <limits.h>
 #include "file.h"
-#include "processor_dir.h"
+#include "../processors/processor_dir.h"
 
 #ifndef PATH_MAX
 #define PATH_MAX 4096
