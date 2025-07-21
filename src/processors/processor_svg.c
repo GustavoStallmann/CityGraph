@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "processor_svg.h"
 #include "processor_dir.h"
 #include "../forms/form.h"
@@ -68,6 +69,9 @@ static void svg_export_rectangle(FILE *svg_file, int form_id, double x, double y
 }
 
 static void svg_export_text(FILE *svg_file, int form_id, double x, double y, char *text, FormStyle style) {
+    text = text != NULL? text: "INVALID"; 
+    printf("%d %lf %lf %s", form_id, x, y, text); 
+
     fprintf(svg_file, 
         "\t<text id='%d' x='%lf' y='%lf' fill='%s' stroke='%s' stroke-width='%s' text-anchor='%s' font-weight='%s' font-size='%s' font-family='%s'><![CDATA[ %s ]]></text>\n",
         form_id, x, y, get_form_style_fill_color(style), get_form_style_border_color(style), get_form_style_stroke_width(style), 
@@ -91,8 +95,7 @@ static void export_form(void *value, callback_data call_data) {
     FormType form_type = form_get_type(form); 
     FormStyle form_style = form_get_style(form);
     int form_id = form_get_id(form); 
-    char *form_text = form_get_text(form);
-
+    
     double x, y, wr, h; 
     form_get_coordinates(form, &x, &y);
     form_get_dimensions(form, &wr, &h);
@@ -107,9 +110,11 @@ static void export_form(void *value, callback_data call_data) {
         case LINE: 
             svg_export_line(svg_file, form_id, x, y, wr, h, form_style);
             break; 
-        case TEXT: 
+        case TEXT: {
+            char *form_text = form_get_text(form);
             svg_export_text(svg_file, form_id, x, y, form_text, form_style);
             break;
+        }
         default:
             fprintf(stderr, "[processor_svg] Error: invalid form type, skipping exportation (%d)\n", form_type);
     }
@@ -128,7 +133,8 @@ static void svg_close(FILE *svg_file) {
 static void svg_export_forms_list(FILE *svg_file) {
     assert(exporter_instance);
     if (exporter_instance->export_dir == NULL || exporter_instance->forms == NULL) {
-        fprintf(stderr, "[processor_svg] Error: export directory or forms list were not defined"); 
+        fprintf(stderr, "[processor_svg] Error: export directory or forms list were not defined\n");
+        return;
     }
     
     list_foreach(exporter_instance->forms, &export_form, svg_file); 
@@ -144,4 +150,5 @@ void svg_export_forms() {
     svg_export_header(svg_file);
     svg_export_forms_list(svg_file);
     svg_close(svg_file);
+    file_close(svg_file);
 }
