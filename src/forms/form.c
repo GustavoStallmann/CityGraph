@@ -35,6 +35,10 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
         fprintf(stderr, "[form] Error: insufficient memory to alloc");
         exit(EXIT_FAILURE); 
     }
+
+    form->id = id; 
+    form->form_type = tp; 
+    form->form_instance = NULL; 
     
     switch (tp) {
         case CIRCLE: 
@@ -60,8 +64,7 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
         free(form); 
         return NULL; 
     }
-    form->id = id; 
-    form->form_type = tp; 
+    
     return form; 
 }
 
@@ -203,10 +206,12 @@ int form_get_id(Form f) {
 char* form_get_text(Form f) {
     assert(f); 
 
-    FormType form_type = form_get_type(f); 
-    if (form_type != TEXT) return NULL; 
-
-    return get_text_string((Text) f);     
+    Form_st *form = (Form_st *) f;
+    if (form->form_type != TEXT) return NULL;
+    
+    Text text_inst = (Text) form->form_instance;
+    if (text_inst == NULL) return "";
+    return get_text_string(text_inst);
 }
 
 void form_transp(Form form, double x, double y) {
