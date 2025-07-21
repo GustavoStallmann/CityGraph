@@ -35,9 +35,9 @@ clean:
 	rm -rf ${RESULT_DIR}
 
 run:
-	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/01-joined.qry"
 
 debug:
-	valgrind --leak-check=full ./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo"
+	valgrind --leak-check=full ./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/01-joined.qry"
 
 .PHONY: all clean test debug
