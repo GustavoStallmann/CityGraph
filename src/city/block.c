@@ -7,12 +7,13 @@
 typedef struct Block_st {
     char *name; 
     Form block_form; 
+    Form block_text;
 } Block_st; 
 
 static char* alloc_str(char *str) {
     int str_len = strlen(str); 
 
-    char *new_str = (char *) malloc(str_len * sizeof(char)); 
+    char *new_str = (char *) malloc((str_len + 1) * sizeof(char)); 
     if (new_str == NULL) return NULL; 
 
     strcpy(new_str, str);
@@ -22,6 +23,7 @@ static char* alloc_str(char *str) {
 Block new_block(char *name, Form block_form) {
     assert(name);
     assert(block_form); 
+
     char *alloc_name = alloc_str(name); 
     if (alloc_name == NULL) return NULL; 
 
@@ -30,6 +32,14 @@ Block new_block(char *name, Form block_form) {
 
     block->name = alloc_name;
     block->block_form = block_form; 
+
+    double x, y; 
+    form_get_coordinates(block_form, &x, &y);
+    block->block_text = new_form(TEXT, -1, x, y, 0, 0, name, NULL); 
+    if (block->block_text == NULL) {
+        fprintf(stderr, "(block) Error: couldn't alloc block text\n");
+        return NULL; 
+    }
 
     return (Block) block;
 }
@@ -57,6 +67,15 @@ Form block_get_form(Block b) {
     return block->block_form; 
 }
 
+Form block_get_form_text(Block b) {
+    assert(b); 
+    
+    Block_st *block = (Block_st *) b;
+    if (block->block_text == NULL) return NULL; 
+
+    return block->block_text; 
+}
+
 void block_free(Block b) {
     assert(b);
 
@@ -64,5 +83,6 @@ void block_free(Block b) {
     if (block->name != NULL) {
         free(block->name);
     }
+
     free(b); 
 }

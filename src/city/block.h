@@ -31,6 +31,13 @@ void block_set_name(Block block, char *name);
 */
 Form block_get_form(Block b);
 
+/*
+ * Get the form of block name 
+ * @param "Block" the block to get the text form
+ * @return "Form" the text form of the block
+*/
+Form block_get_form_text(Block b);
+
 
 /*
  * Free the given form
