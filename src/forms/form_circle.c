@@ -19,12 +19,12 @@ typedef struct {
 Circle new_circle(double x, double y, double r, FormStyle style) {
     Circle_st *circle = (Circle_st *) malloc(sizeof(Circle_st)); 
     if (circle == NULL) {
-        fprintf(stderr, "(ERROR) form_circle:insufficient memory to alloc circle");
+        fprintf(stderr, "(ERROR) form_circle: insufficient memory to alloc circle\n");
         return NULL;
     }
 
     if (x < 0 || y < 0 || r <= 0) {
-        fprintf(stderr, "(ERROR) form_circle: invalid coordinates (x: %lf, y: %lf, r: %lf)", x, y, r);
+        fprintf(stderr, "(ERROR) form_circle: invalid coordinates (x: %lf, y: %lf, r: %lf)\n", x, y, r);
         free_form_style(style);
         free(circle);
         return NULL;
