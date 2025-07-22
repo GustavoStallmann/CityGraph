@@ -38,6 +38,15 @@ Form block_get_form(Block b);
 */
 Form block_get_form_text(Block b);
 
+/*
+ * Get the block coordinate based on the given address
+ * @param "Block" the base block
+ * @param "face" (N | S | L | O) cardinal point
+ * @param "number" residence number
+ * @param "*x" return x coordinate
+ * @param "*y" return the y coordinate
+*/
+void block_get_adress_coordinate(Block b, char face, int number, int *x, int *y); 
 
 /*
  * Free the given form

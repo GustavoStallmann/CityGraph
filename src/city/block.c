@@ -76,6 +76,22 @@ Form block_get_form_text(Block b) {
     return block->block_text; 
 }
 
+void block_get_adress_coordinate(Block b, char face, int number, int *x, int *y) {
+    Block_st *block = (Block_st *) b;
+    double bx, by; 
+    form_get_coordinates(block->block_form, &bx, &by);
+
+    if (face == 'N' || face == 'S') {
+        *x = bx + number; 
+        *y = by; 
+    } else if (face == 'L' || face == 'O') {
+        *x = bx; 
+        *y = by + number; 
+    } else {
+        fprintf(stderr, "(block) Error: got invalid face type (%c)", face); 
+    }
+}
+
 void block_free(Block b) {
     assert(b);
 

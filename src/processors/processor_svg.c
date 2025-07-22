@@ -70,7 +70,6 @@ static void svg_export_rectangle(FILE *svg_file, int form_id, double x, double y
 
 static void svg_export_text(FILE *svg_file, int form_id, double x, double y, char *text, FormStyle style) {
     text = text != NULL? text: "INVALID"; 
-    printf("%d %lf %lf %s", form_id, x, y, text); 
 
     fprintf(svg_file, 
         "\t<text id='%d' x='%lf' y='%lf' fill='%s' stroke='%s' stroke-width='%s' text-anchor='%s' font-weight='%s' font-size='%s' font-family='%s'><![CDATA[ %s ]]></text>\n",

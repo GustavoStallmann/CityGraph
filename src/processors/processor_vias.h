@@ -2,6 +2,7 @@
 #define PROCESSOR_VIAS_H
 #include "processor_dir.h"
 #include "../data_structures/graph.h"
+#include "../data_structures/smu_treap.h"
 
 /*
  * @file: processor_vias.h 
@@ -10,5 +11,11 @@
  * @author: Gustavo Stallmann
 */
 
-Graph via_process(Dir dir); 
+/*
+ * Process the given via file
+ * @param "Dir" the directory of via file
+ * @param "SmuTreap" aux treap to insert the graph points
+ * @return "Graph" the graph created from .via
+*/
+Graph via_process(Dir dir, SmuTreap aux_treap) ; 
 #endif

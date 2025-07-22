@@ -38,7 +38,15 @@ static void process_nv(Graph *graph, char *line_buffer) {
     *graph = createGraph(g_size, false, "-"); 
 }
 
-static void process_v(char *line_buffer, Graph graph) {
+
+static void fCalcPointBB(DescritorTipoInfo tp, Info i, double *x, double *y, double *w, double *h) {
+    (void) tp; 
+    point_get_coordinates(i, x, y);
+    *w = 0;
+    *h = 0; 
+}
+
+static void process_v(char *line_buffer, Graph graph, SmuTreap aux_treap) {
     if (graph == NULL) {
         fprintf(stderr, "(processor_vias) Error: graph's unintialized, skipping vertex creation\n");
         return; 
@@ -53,6 +61,7 @@ static void process_v(char *line_buffer, Graph graph) {
     }
 
     Point v_point = new_point(x, y); 
+    insertSmuT(aux_treap, x, y, v_point, 0,&fCalcPointBB);
     addNode(graph, v_name, v_point);
 }
 
@@ -86,7 +95,7 @@ static void process_e(char *line_buffer, Graph graph) {
     addEdge(graph, from_node, to_node, edge_street);
 }
 
-static void via_process_commands(FILE *via_file, Graph *graph) {
+static void via_process_commands(FILE *via_file, Graph *graph, SmuTreap aux_treap) {
     char line_buffer[MAX_LINE_LENGTH]; 
     char command_type[ARG_SIZE]; 
 
@@ -106,7 +115,7 @@ static void via_process_commands(FILE *via_file, Graph *graph) {
         }
 
         if (strcmp(command_type, "v") == 0) {
-            process_v(line_buffer, *graph);
+            process_v(line_buffer, *graph, aux_treap);
         } else if (strcmp(command_type, "e") == 0) {
             process_e(line_buffer, *graph); 
         } else {
@@ -115,7 +124,7 @@ static void via_process_commands(FILE *via_file, Graph *graph) {
     }
 }
 
-Graph via_process(Dir dir) {
+Graph via_process(Dir dir, SmuTreap aux_treap) {
     assert(dir); 
 
     char *file_extension = get_dir_file_extension(dir); 
@@ -131,7 +140,7 @@ Graph via_process(Dir dir) {
     }
 
     Graph graph = NULL;
-    via_process_commands(via_file, &graph);
+    via_process_commands(via_file, &graph, aux_treap);
 
     file_close(via_file);
     return graph; 

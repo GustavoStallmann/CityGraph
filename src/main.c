@@ -4,6 +4,7 @@
 #include "city/block.h"
 #include "data_structures/list.h"
 #include "data_structures/hash_table.h"
+#include "data_structures/smu_treap.h"
 #include "forms/form.h"
 #include "processors/processor_args.h"
 #include "processors/processor_dir.h"
@@ -32,8 +33,9 @@ int main(int argc, char *argv[]) {
     
     printf("[CityGraph] -> started\n");
 
-    // Register
+    // Register and aux data structures
     Hash registers = new_hash(11); 
+    SmuTreap treap = newSmuTreap(1, 1, 0.1, 1000);
 
     // Process geo file (blocks)
     Dir geo_dir = dir_combine_path_and_file(config.base_input_dir, config.geo_file);
@@ -41,14 +43,14 @@ int main(int argc, char *argv[]) {
     
     // Process .via file (city)
     Dir via_dir = dir_combine_path_and_file(config.base_input_dir, config.via_file); 
-    Graph city_graph = via_process(via_dir);
+    Graph city_graph = via_process(via_dir, treap);
     
     // Process .qry file 
     Dir qry_dir = dir_combine_path_and_file(config.base_input_dir, config.qry_file);
     char txt_file_name[50]; 
     combine_file_names(get_dir_file_name(geo_dir), get_dir_file_name(qry_dir), "txt", txt_file_name, sizeof(txt_file_name));
     Dir txt_dir = dir_combine_path_and_file(config.base_output_dir, txt_file_name);
-    qry_process(qry_dir, txt_dir, registers, city_graph);
+    qry_process(qry_dir, txt_dir, registers, city_graph, treap);
     
     // Extract forms from the blocks
     List block_forms = new_list(); 

@@ -18,6 +18,7 @@ typedef struct Graph_st {
 typedef struct Edge_st {
     Node from;
     Node to; 
+    bool active; 
     Info info; 
 } Edge_st; 
 
@@ -198,40 +199,40 @@ Edge getEdge(Graph g, Node from, Node to) {
 }
 
 Node getFromNode(Graph g, Edge e) {
+    (void) g;
     assert(g); 
     assert(e);
 
-    Graph_st *graph = (Graph_st *) g; 
     Edge_st *edge = (Edge_st *) e; 
 
     return edge->from; 
 }
 
 Node getToNode(Graph g, Edge e) {
+    (void) g;
     assert(g); 
     assert(e);
 
-    Graph_st *graph = (Graph_st *) g; 
     Edge_st *edge = (Edge_st *) e; 
 
     return edge->to; 
 }
 
 Info getEdgeInfo(Graph g, Edge e) { 
+    (void) g;
     assert(g); 
     assert(e);
 
-    Graph_st *graph = (Graph_st *) g; 
     Edge_st *edge = (Edge_st *) e; 
 
     return edge->info; 
 }
 
 void setEdgeInfo(Graph g, Edge e, Info info) {
+    (void) g;
     assert(g); 
     assert(e);
 
-    Graph_st *graph = (Graph_st *) g; 
     Edge_st *edge = (Edge_st *) e; 
 
     edge->info = info; 
@@ -252,7 +253,6 @@ void removeEdge(Graph g, Edge e) {
     Edge_st *edge = (Edge_st *) e; 
 
     Node from_node = edge->from; 
-    Node to_node = edge->to; 
     Node_st *found_node = (Node_st *) dict_get(graph->vertexes_dict, (int) from_node);
     list_remove_value(found_node->adjacencies, e, &list_compare_edge);   
 }

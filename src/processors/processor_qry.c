@@ -7,6 +7,8 @@
 #include "../utils/file.h"
 #include "../data_structures/list.h"
 
+
+
 #define MAX_LINE_LENGTH 512
 
 static bool process_command(char *line_buffer, char *command_type) {
@@ -42,7 +44,7 @@ static void qry_execute(FILE *qry_file, FILE *txt_file, Graph graph) {
     }
 }
 
-void qry_process(Dir qry, Dir txt, Hash registers, Graph graph) {
+void qry_process(Dir qry, Dir txt, Hash registers, Graph graph, SmuTreap aux_treap) {
     char *file_extension = get_dir_file_extension(qry);
     if (strcmp(file_extension, "qry") != 0) {
         fprintf(stderr, "ERROR: processor_qry requires a .qry file extension\n"); 
