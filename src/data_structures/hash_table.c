@@ -94,11 +94,15 @@ void hash_set(Hash t, HashKey key, HashValue value) {
 
     HashNode_st *current_node = hash_t->table[hash_key]; 
     while (current_node != NULL) {
-        if (!strcmp(current_node->value, key)) break; 
+        if (!strcmp(current_node->key, key)) break; 
         current_node = current_node->next; 
     }
     
-    current_node->value = value; 
+    if (current_node != NULL) {
+        current_node->value = value; 
+    } else {
+        hash_t->table[hash_key] = new_node(key, value, hash_t->table[hash_key]);
+    }
 }
 
 HashValue hash_remove(Hash t, HashKey key) {

@@ -58,6 +58,7 @@ Graph createGraph(int nVert, bool directed, char *nomeGrafo) {
     graph->directed = directed; 
     graph->name = alloc_str(nomeGrafo);
     graph->max_vertex_amount = nVert; 
+    graph->vertex_amount = 0;
 
     return (Graph) graph;
 }
@@ -176,6 +177,19 @@ Edge addEdge(Graph g, Node from, Node to, Info info) {
     new_edge->info = info; 
 
     list_insert_end(from_node->adjacencies, new_edge); 
+    
+    // For undirected graphs, add the reverse edge
+    if (!graph->directed) {
+        Edge_st *reverse_edge = (Edge_st *) malloc(sizeof(Edge_st)); 
+        if (reverse_edge == NULL) alloc_error(); 
+
+        reverse_edge->from = to; 
+        reverse_edge->to = from; 
+        reverse_edge->info = info; 
+
+        list_insert_end(to_node->adjacencies, reverse_edge); 
+    }
+    
     return new_edge;     
 }
 
@@ -244,6 +258,26 @@ static bool list_compare_edge(ListValue value, void *target) {
     return node_edge == target_edge; 
 }
 
+typedef struct RemoveEdgeData_st {
+    Node from_node;
+    Node to_node;
+    Info edge_info;
+    List target_adjacencies;
+    Edge_st *edge_to_remove;
+} RemoveEdgeData_st;
+
+static void find_reverse_edge(ListValue value, void *data) {
+    Edge_st *edge = (Edge_st *) value;
+    RemoveEdgeData_st *remove_data = (RemoveEdgeData_st *) data;
+    
+    if (edge != NULL && 
+        edge->from == remove_data->to_node && 
+        edge->to == remove_data->from_node &&
+        edge->info == remove_data->edge_info) {
+        remove_data->edge_to_remove = edge;
+    }
+}
+
 void removeEdge(Graph g, Edge e) {
     assert(g); 
     assert(e);
@@ -252,8 +286,28 @@ void removeEdge(Graph g, Edge e) {
     Edge_st *edge = (Edge_st *) e; 
 
     Node from_node = edge->from; 
-    Node_st *found_node = (Node_st *) dict_get(graph->vertexes_dict, (int) from_node);
-    list_remove_value(found_node->adjacencies, e, &list_compare_edge);   
+    Node to_node = edge->to;
+    Node_st *from_node_st = (Node_st *) dict_get(graph->vertexes_dict, (int) from_node);
+    Node_st *to_node_st = (Node_st *) dict_get(graph->vertexes_dict, (int) to_node);
+    
+    list_remove_value(from_node_st->adjacencies, e, &list_compare_edge);   
+    
+    if (!graph->directed && to_node_st != NULL) {
+        RemoveEdgeData_st remove_data = {
+            .from_node = from_node,
+            .to_node = to_node,
+            .edge_info = edge->info,
+            .target_adjacencies = to_node_st->adjacencies,
+            .edge_to_remove = NULL
+        };
+        
+        list_foreach(to_node_st->adjacencies, &find_reverse_edge, &remove_data);
+        
+        if (remove_data.edge_to_remove != NULL) {
+            list_remove_value(to_node_st->adjacencies, remove_data.edge_to_remove, &list_compare_edge);
+            free(remove_data.edge_to_remove);
+        }
+    }
 }
 
 static bool list_compare_adjacency(ListValue value, void *target) {
@@ -270,7 +324,7 @@ bool isAdjacent(Graph g, Node from, Node to) {
     Node_st *to_node = (Node_st *) dict_get(graph->vertexes_dict, (int) to);
 
     if (from_node == NULL || to_node == NULL) return false;
-    return list_search(from_node->adjacencies, to_node, list_compare_adjacency);
+    return list_search(from_node->adjacencies, &to, &list_compare_adjacency);
 }
 
 void adjacentEdges(Graph g, Node node, List arestasAdjacentes) {
@@ -294,7 +348,7 @@ void getNodeNames(Graph g, List nomesNodes) {
         if (dict_is_empty(graph->vertexes_dict, i)) continue;
 
         Node_st *node = (Node_st *) dict_get(graph->vertexes_dict, i); 
-        if (node == NULL || node->name) continue; 
+        if (node == NULL || node->name == NULL) continue; 
 
         char *copy_name = alloc_str(node->name);
         if (copy_name == NULL) continue; 

@@ -12,7 +12,8 @@
 
 typedef struct SvgExporter_st {
     List forms; 
-    Dir export_dir; 
+    Dir export_dir;
+    int unique_id_counter; 
 } SvgExporter_st; 
 
 static SvgExporter_st *exporter_instance = NULL;
@@ -24,6 +25,7 @@ SvgExporter svg_exporter_init( ) {
 
         exporter_instance->forms = new_list(); 
         exporter_instance->export_dir = new_dir("./output.svg");
+        exporter_instance->unique_id_counter = 1;
     }
 
     return exporter_instance;
@@ -119,13 +121,13 @@ static void svg_export_animated_form(FILE *svg_file, int form_id, double x, doub
         path_export_data data = { .svg_file = svg_file, .is_first_point = 1 };
         list_foreach(path_points, build_path_point, &data);
         
-        fprintf(svg_file, "' stroke='%s' stroke-width='2' fill='none' stroke-dasharray='5,5'/>\n", 
+        fprintf(svg_file, "' stroke='%s' stroke-width='5' fill='none'/>\n", 
                 get_form_style_border_color(style));
     }
     
     fprintf(svg_file, 
-        "\t\t<circle id='%d' r='%lf' cx='%lf' cy='%lf' fill='%s' stroke='%s' stroke-width='%s' fill-opacity='0.8'>\n",
-        form_id, r, x, y, get_form_style_fill_color(style), get_form_style_border_color(style), get_form_style_stroke_width(style)
+        "\t\t<circle id='%d' r='%lf' fill='%s' stroke='%s' stroke-width='%s' fill-opacity='0.8'>\n",
+        form_id, r, get_form_style_fill_color(style), get_form_style_border_color(style), get_form_style_stroke_width(style)
     );
     
     if (path_points != NULL && list_get_size(path_points) > 1) {
@@ -148,31 +150,33 @@ static void export_form(void *value, callback_data call_data) {
     assert(call_data);
 
     FormType form_type = form_get_type(form); 
-    FormStyle form_style = form_get_style(form);
-    int form_id = form_get_id(form); 
+    
+    // Generate unique ID for SVG to avoid conflicts
+    int unique_id = exporter_instance->unique_id_counter++;
     
     double x, y, wr, h; 
     form_get_coordinates(form, &x, &y);
     form_get_dimensions(form, &wr, &h);
+    FormStyle form_style = form_get_style(form);
     
     switch (form_type) {
         case CIRCLE: 
-            svg_export_circle(svg_file, form_id, x, y, wr, form_style);
+            svg_export_circle(svg_file, unique_id, x, y, wr, form_style);
             break; 
         case RECT: 
-            svg_export_rectangle(svg_file, form_id, x, y, wr, h, form_style);
+            svg_export_rectangle(svg_file, unique_id, x, y, wr, h, form_style);
             break; 
         case LINE: 
-            svg_export_line(svg_file, form_id, x, y, wr, h, form_style);
+            svg_export_line(svg_file, unique_id, x, y, wr, h, form_style);
             break; 
         case TEXT: {
             char *form_text = form_get_text(form);
-            svg_export_text(svg_file, form_id, x, y, form_text, form_style);
+            svg_export_text(svg_file, unique_id, x, y, form_text, form_style);
             break;
         }
         case ANIMATED: {
             List path_points = form_get_path_points(form);
-            svg_export_animated_form(svg_file, form_id, x, y, 10, form_style, path_points);
+            svg_export_animated_form(svg_file, unique_id, x, y, 10, form_style, path_points);
             break;
         }
         default:
@@ -182,7 +186,7 @@ static void export_form(void *value, callback_data call_data) {
 
 static void svg_export_header(FILE *svg_file) {
     assert(svg_file);
-    fprintf(svg_file, "<svg xmlns='http://www.w3.org/2000/svg'>\n"); 
+    fprintf(svg_file, "<svg viewBox='0 0 10500 3500' xmlns='http://www.w3.org/2000/svg'>\n"); 
 }
 
 static void svg_close(FILE *svg_file) {
@@ -203,6 +207,9 @@ static void svg_export_forms_list(FILE *svg_file) {
 void svg_export_forms() {
     assert(exporter_instance); 
     if (exporter_instance->export_dir == NULL) return; 
+
+    // Reset unique ID counter for each export
+    exporter_instance->unique_id_counter = 1;
 
     FILE *svg_file = file_open_writable(exporter_instance->export_dir); 
     if (svg_file == NULL) return; 

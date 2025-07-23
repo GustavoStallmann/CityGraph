@@ -39,21 +39,25 @@ int main(int argc, char *argv[]) {
     SmuTreap treap = newSmuTreap(1, 1, 0.1, 1000);
 
     // Process geo file (blocks)
+    printf("Processing .geo file...\n");
     Dir geo_dir = dir_combine_path_and_file(config.base_input_dir, config.geo_file);
     List blocks = geo_process(geo_dir, blocks_table);
     
     // Process .via file (city)
+    printf("Processing .via file...\n");
     Dir via_dir = dir_combine_path_and_file(config.base_input_dir, config.via_file); 
     Graph city_graph = via_process(via_dir, treap);
     
     // Process .qry file 
+    printf("Processing .qry file...\n");
     Dir qry_dir = dir_combine_path_and_file(config.base_input_dir, config.qry_file);
     char txt_file_name[50]; 
     combine_file_names(get_dir_file_name(geo_dir), get_dir_file_name(qry_dir), "txt", txt_file_name, sizeof(txt_file_name));
     Dir txt_dir = dir_combine_path_and_file(config.base_output_dir, txt_file_name);
-    qry_process(qry_dir, txt_dir, registers, city_graph, treap, blocks_table);
+    List forms = qry_process(qry_dir, txt_dir, registers, city_graph, treap, blocks_table);
     
     // Extract forms from the blocks
+    printf("Exporting results...\n");
     List block_forms = new_list(); 
     list_foreach(blocks, &list_extract_block_form, block_forms); 
     
@@ -64,13 +68,14 @@ int main(int argc, char *argv[]) {
     svg_exporter_init(); 
     svg_set_directory(svg_dir);
     svg_add_forms(block_forms);
+    svg_add_forms(forms); 
     svg_export_forms(); 
     
     // Free memory
     list_free(blocks, NULL); 
     dir_free(geo_dir); 
     free_arg_manager();
-    
+    printf("Program completed, exiting...\n");    
     return EXIT_SUCCESS;
 }
 

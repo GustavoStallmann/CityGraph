@@ -321,12 +321,10 @@ static bool compare_nodes(ListValue value, void *target) {
    SmuNode *node = (SmuNode *) value; 
    SmuNode *target_node = (SmuNode *) target; 
 
-   Info node_form = getInfoSmuT(NULL, node); 
-   Info node_target_form = getInfoSmuT(NULL, target_node); 
+   Node_st *node_st = (Node_st *) node;
+   Node_st *target_node_st = (Node_st *) target_node;
 
-   int node_id = form_get_id(node_form); 
-   int target_node_id = form_get_id(node_target_form); 
-   return node_id == target_node_id;
+   return node_st->formType == target_node_st->formType;
 }
 
 static void getInfosDentroRegiaoSmuT_aux(SmuTreap t, Node_st *root, BoundingBox interest_bb, List L, FdentroDeRegiao is_form_inside_region, double x1, double y1, double x2, double y2) {

@@ -35,7 +35,7 @@ Block new_block(char *name, Form block_form) {
 
     double x, y; 
     form_get_coordinates(block_form, &x, &y);
-    block->block_text = new_form(TEXT, -1, x, y, 0, 0, name, NULL); 
+    block->block_text = new_form(TEXT, -1, x + 5, y + 15, 0, 0, name, new_form_style(NULL, NULL, NULL, "normal", NULL, NULL, NULL)); 
     if (block->block_text == NULL) {
         fprintf(stderr, "(block) Error: couldn't alloc block text\n");
         return NULL; 
@@ -78,17 +78,30 @@ Form block_get_form_text(Block b) {
 
 void block_get_adress_coordinate(Block b, char face, int number, int *x, int *y) {
     Block_st *block = (Block_st *) b;
-    double bx, by; 
+    double bx, by, bw, bh; 
     form_get_coordinates(block->block_form, &bx, &by);
+    form_get_dimensions(block->block_form, &bw, &bh);
 
-    if (face == 'N' || face == 'S') {
-        *x = bx + number; 
-        *y = by; 
-    } else if (face == 'L' || face == 'O') {
-        *x = bx; 
-        *y = by + number; 
-    } else {
-        fprintf(stderr, "(block) Error: got invalid face type (%c)", face); 
+    switch (face) {
+        case 'N':
+            *x = bx + number; 
+            *y = by + bh; 
+            break; 
+        case 'S':
+            *x = bx + number; 
+            *y = by; 
+            break; 
+        case 'L':
+            *x = bx; 
+            *y = by + number; 
+            break; 
+        case 'O':
+            *x = bx + bw; 
+            *y = by + number; 
+            break; 
+        default:
+            fprintf(stderr, "(block) Error: got invalid face type (%c)", face); 
+            break;
     }
 }
 

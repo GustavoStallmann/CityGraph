@@ -45,19 +45,21 @@ static void find_nearest_point(void *value, callback_data call_data) {
     point_get_coordinates(actual_point, &x, &y);
     point_get_coordinates(data->target_point, &x2, &y2);
 
-    double actual_x = 0, actual_y = 0; 
-    double actual_distance = -1;
+    double current_distance = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2)); 
     
-    if (data->nearest_point != NULL) {
-        point_get_coordinates(data->nearest_point, &actual_x, &actual_y);
-        double actual_distance =  sqrt(pow(x2 - actual_x, 2) + pow(y2 - actual_y, 2)); 
-    }
-
-    double distance = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2)); 
-    if (actual_distance < 0 || distance < actual_distance) {
+    if (data->nearest_point == NULL) {
         data->nearest_info = actual_node_info;
         data->nearest_point = actual_point;
-    } 
+    } else {
+        double actual_x, actual_y; 
+        point_get_coordinates(data->nearest_point, &actual_x, &actual_y);
+        double nearest_distance = sqrt(pow(x2 - actual_x, 2) + pow(y2 - actual_y, 2)); 
+        
+        if (current_distance < nearest_distance) {
+            data->nearest_info = actual_node_info;
+            data->nearest_point = actual_point;
+        }
+    }
 }
 
 static void o_find_adrees_vertex(char *line_buffer, SmuTreap aux_treap, Hash blocks_table, Hash registers) {
@@ -127,33 +129,82 @@ static void create_path(char *line_buffer, Hash registers, Graph graph, Hash pat
     }
     
     Point start_point = getNodeInfo(graph, *origin_node);
+    if (start_point == NULL) {
+        fprintf(stderr, "(processor_qry) Error: couldn't get start point from graph\n");
+        return;
+    }
+    
     double start_x, start_y; 
     point_get_coordinates(start_point, &start_x, &start_y);
     
     Dict came_from_length, cost_so_far_length; 
     a_star(graph, *origin_node, *dest_node, &came_from_length, &cost_so_far_length, true);
     List path_length = reconstruct_path(came_from_length, *origin_node, *dest_node, graph); 
+    
+    if (path_length == NULL || list_get_size(path_length) == 0) {
+        fprintf(stderr, "(processor_qry) Warning: path_length is empty, no path found\n");
+        path_length = new_list();
+    }
+    
     Form path_form_length = new_animated_form_wrapper(0, start_x, start_y, 10, path_length);
+    if (path_form_length == NULL) {
+        fprintf(stderr, "(processor_qry) Error: failed to create animated form for length path\n");
+        return;
+    }
     hash_set(path_table, path_name, path_form_length);
     
     Dict came_from_velocity, cost_so_far_velocity; 
     a_star(graph, *origin_node, *dest_node, &came_from_velocity, &cost_so_far_velocity, false);
     List path_velocity = reconstruct_path(came_from_velocity, *origin_node, *dest_node, graph); 
+    
+    if (path_velocity == NULL || list_get_size(path_velocity) == 0) {
+        fprintf(stderr, "(processor_qry) Warning: path_velocity is empty, no path found\n");
+        path_velocity = new_list();
+    }
+    
     Form path_form_velocity = new_animated_form_wrapper(0, start_x, start_y, 10, path_velocity);
+    if (path_form_velocity == NULL) {
+        fprintf(stderr, "(processor_qry) Error: failed to create animated form for velocity path\n");
+        return;
+    }
     
     char faster_path_name[ARG_SIZE + 10] = {0};
     snprintf(faster_path_name, sizeof(faster_path_name), "%s_fast", path_name);
     hash_set(path_table, faster_path_name, path_form_velocity);
 }
 
-static void output_path(char *line_buffer, Graph graph, Hash paths_table) {
+static void output_path(char *line_buffer, Graph graph, Hash paths_table, List forms_to_output) {
     char path_name[ARG_SIZE] = {0}, cmc_color[ARG_SIZE] = {0}, cmr_color[ARG_SIZE] = {0}; 
     int parsed = sscanf(line_buffer, "%*s %s %s %s", path_name, cmc_color, cmr_color); 
     if (parsed != 3) {
-        fprintf(stderr, "(processor_qry) Error: couldn't parse aguments for path output");
+        fprintf(stderr, "(processor_qry) Error: couldn't parse arguments for path output\n");
+        return;
     }
-    // TODO: OUTPUT PATH 
-    // Form path = 
+
+    char faster_path_name[ARG_SIZE + 10] = {0};
+    snprintf(faster_path_name, sizeof(faster_path_name), "%s_fast", path_name);
+
+    Form path = hash_get(paths_table, path_name);
+    Form faster_path = hash_get(paths_table, faster_path_name);
+    if (path == NULL || faster_path == NULL) {
+        fprintf(stderr, "(processor_qry) Error: couldn't find paths to output\n");
+        return; 
+    }
+
+    // Apply colors to differentiate the paths
+    FormStyle path_style = form_get_style(path);
+    FormStyle faster_path_style = form_get_style(faster_path);
+    
+    if (path_style != NULL) {
+        set_form_border_color(path_style, cmc_color);  // Shortest path color
+    }
+    
+    if (faster_path_style != NULL) {
+        set_form_border_color(faster_path_style, cmr_color);  // Fastest path color
+    }
+
+    list_insert(forms_to_output, path);
+    list_insert(forms_to_output, faster_path);
 }
 
 static void qry_execute(FILE *qry_file, FILE *txt_file, Graph graph, SmuTreap aux_treap, Hash block_table, Hash registers, List export_forms) {
@@ -171,12 +222,11 @@ static void qry_execute(FILE *qry_file, FILE *txt_file, Graph graph, SmuTreap au
         } else if (strcmp(command_type, "p?") == 0) {
             create_path(line_buffer, registers, graph, paths);
         } else if (strcmp(command_type, "shw") == 0) {
-            
+            output_path(line_buffer, graph, paths, export_forms);
         } else {
             fprintf(stderr, "ERROR: processor_qry unknown command type '%s'\n", command_type);
         }
     }
-
 }
 
 List qry_process(Dir qry, Dir txt, Hash registers, Graph graph, SmuTreap aux_treap, Hash blocks_table) {

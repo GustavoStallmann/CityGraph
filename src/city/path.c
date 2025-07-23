@@ -64,10 +64,9 @@ static void a_star_foreach_adjacencie(ListValue value, void *d) {
         Node *from_node_ptr = (Node *) malloc(sizeof(Node));
         *from_node_ptr = data->current;
         dict_put(data->came_from, to_node, from_node_ptr); 
-        return; 
+    } else {
+        free(new_cost);
     }
-
-    free(new_cost);
 }
 
 void a_star(Graph graph, Node start, Node goal, Dict *came_from, Dict *cost_so_far, bool use_length) {
@@ -99,17 +98,17 @@ void a_star(Graph graph, Node start, Node goal, Dict *came_from, Dict *cost_so_f
         adjacentEdges(graph, *current_node, current_node_adjacencies); 
 
         AStarData_st data = {
-            .came_from = *came_from, .cost_so_far = *cost_so_far, 
-            .graph = graph, .current = *current_node, 
+            .came_from = *came_from, 
+            .cost_so_far = *cost_so_far, 
+            .graph = graph, 
+            .current = *current_node, 
             .goal = goal,
             .queue = frontier,
             .use_length = use_length
         };
         list_foreach(current_node_adjacencies, &a_star_foreach_adjacencie, &data);
-        
         list_free(current_node_adjacencies, NULL);
     }
-    
 }
 
 List reconstruct_path(Dict came_from, Node start, Node goal, Graph graph) {

@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -fstack-protector-all -g
 SRC_DIR = src
 OBJ_DIR = output
-RESULT_DIR = /home/stallmarch/projects/uel/CityGraph/result
+RESULT_DIR = $(PROJECT_PATH)/result
 PROJECT_PATH := $(shell pwd)
 
 # Find all .c files in the source directory and subdirectories
@@ -35,9 +35,12 @@ clean:
 	rm -rf ${RESULT_DIR}
 
 run:
-	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/01-joined.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/00-perc-smpl.qry"
+
+c2: 
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/00-perc-smpl.qry"
 
 debug:
-	valgrind --leak-check=full ./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/01-joined.qry"
+	valgrind --leak-check=full ./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/00-perc-smpl.qry"
 
 .PHONY: all clean test debug

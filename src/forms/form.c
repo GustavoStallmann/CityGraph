@@ -8,6 +8,7 @@
 #include "form_line.h"
 #include "form_rect.h"
 #include "form_state.h"
+#include "form_animated.h"
 #include "form_style.h"
 #include "form_text.h"
 #include "form_animated.h"
@@ -116,6 +117,8 @@ FormStyle form_get_style(Form form) {
             return get_text_style((Text) form_instance);
         case LINE: 
             return get_line_style((Line) form_instance);
+        case ANIMATED:
+            return get_animated_form_style((AnimatedForm) form_instance);
         
         default:
             fprintf(stderr, "[form] Error: invalid form provided to get style\n");
@@ -143,6 +146,9 @@ void form_get_coordinates(Form form, double *x, double *y) {
         case LINE: 
             get_line_positions((Line) form_instance, x, y, NULL, NULL);
             break;
+        case ANIMATED: 
+            get_animated_form_positions((AnimatedForm) form_instance, x, y, NULL);
+            break; 
         
         default:
             fprintf(stderr, "[form] Error: invalid form provided to get coordinates\n");
@@ -170,6 +176,8 @@ void form_get_dimensions(Form form, double *w, double *h) {
             break;
         case LINE: 
             get_line_positions((Line) form_instance, NULL, NULL, w, h);
+            break;
+        case ANIMATED: 
             break;
         
         default:
@@ -306,7 +314,7 @@ Form new_animated_form_wrapper(int id, double x, double y, double r, List path_p
 
     form->id = id; 
     form->form_type = ANIMATED; 
-    form->form_instance = new_animated_form(x, y, r, path_points);
+    form->form_instance = new_animated_form(x, y, r, path_points, new_form_style(NULL, NULL, NULL, NULL, NULL, NULL, NULL));
 
     if (form->form_instance == NULL) {
         fprintf(stderr, "[form] Error: couldn't alloc memory for the animated form\n"); 
