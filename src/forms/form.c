@@ -10,6 +10,7 @@
 #include "form_state.h"
 #include "form_style.h"
 #include "form_text.h"
+#include "form_animated.h"
 
 typedef struct {
     FormType form_type; 
@@ -53,6 +54,10 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
         case TEXT: 
             form->form_instance = new_text(x, y, text, style);
             break;
+        case ANIMATED:
+            fprintf(stderr, "[form] Error: use new_animated_form_wrapper for ANIMATED forms"); 
+            free(form); 
+            return NULL;
         default:
             fprintf(stderr, "[form] Error: got an undefined form type to creation"); 
             free(form); 
@@ -253,6 +258,8 @@ char* form_get_name(Form form) {
             return "Line"; 
         case TEXT:
             return "Text"; 
+        case ANIMATED:
+            return "Animated";
         default:
             return "Unknown";
     }
@@ -278,6 +285,9 @@ void form_free(Form form) {
         case LINE: 
             free_line((Line) form_instance);
             break;
+        case ANIMATED:
+            free_animated_form((AnimatedForm) form_instance);
+            break;
         
         default:
             fprintf(stderr, "[form] Error: invalid form provided to free memory");
@@ -285,4 +295,38 @@ void form_free(Form form) {
     }
 
     free(form);
+}
+
+Form new_animated_form_wrapper(int id, double x, double y, double r, List path_points) {
+    Form_st *form = (Form_st *) malloc(sizeof(Form_st)); 
+    if (form == NULL) {
+        fprintf(stderr, "[form] Error: insufficient memory to alloc");
+        exit(EXIT_FAILURE); 
+    }
+
+    form->id = id; 
+    form->form_type = ANIMATED; 
+    form->form_instance = new_animated_form(x, y, r, path_points);
+
+    if (form->form_instance == NULL) {
+        fprintf(stderr, "[form] Error: couldn't alloc memory for the animated form"); 
+        free(form); 
+        return NULL; 
+    }
+    
+    return form; 
+}
+
+List form_get_path_points(Form form) {
+    assert(form);
+    
+    FormType form_type = form_get_type(form);
+    if (form_type != ANIMATED) {
+        return NULL;
+    }
+    
+    void *form_instance = form_get_instance(form);
+    if (form_instance == NULL) return NULL;
+    
+    return get_animated_form_path_points((AnimatedForm) form_instance);
 }

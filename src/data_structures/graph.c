@@ -279,7 +279,7 @@ void adjacentEdges(Graph g, Node node, List arestasAdjacentes) {
     assert(arestasAdjacentes);
 
     Graph_st *graph = (Graph_st *) g; 
-    Node_st *from_node = (Node_st *) dict_get(graph, (int) node); 
+    Node_st *from_node = (Node_st *) dict_get(graph->vertexes_dict, (int) node); 
     if (from_node == NULL || from_node->adjacencies == NULL) return; 
 
     list_copy(from_node->adjacencies, arestasAdjacentes);

@@ -5,6 +5,9 @@
 #include "processor_svg.h"
 #include "processor_dir.h"
 #include "../forms/form.h"
+#include "../forms/form_animated.h"
+#include "../city/point.h"
+#include "../data_structures/list.h"
 #include "../utils/file.h"
 
 typedef struct SvgExporter_st {
@@ -85,6 +88,59 @@ static void svg_export_line(FILE *svg_file, int form_id, double x1, double y1, d
     );
 }
 
+typedef struct {
+    FILE *svg_file;
+    int is_first_point;
+} path_export_data;
+
+static void build_path_point(void *value, void *call_data) {
+    Point point = (Point) value;
+    path_export_data *data = (path_export_data *) call_data;
+    
+    if (point == NULL) return;
+    
+    double x, y;
+    point_get_coordinates(point, &x, &y);
+    
+    if (data->is_first_point) {
+        fprintf(data->svg_file, "M %lf %lf", x, y);
+        data->is_first_point = 0;
+    } else {
+        fprintf(data->svg_file, " L %lf %lf", x, y);
+    }
+}
+
+static void svg_export_animated_form(FILE *svg_file, int form_id, double x, double y, double r, FormStyle style, List path_points) {
+    fprintf(svg_file, "\t<g id='animated_%d'>\n", form_id);
+    
+    if (path_points != NULL && list_get_size(path_points) > 1) {
+        fprintf(svg_file, "\t\t<path id='path_%d' d='", form_id);
+        
+        path_export_data data = { .svg_file = svg_file, .is_first_point = 1 };
+        list_foreach(path_points, build_path_point, &data);
+        
+        fprintf(svg_file, "' stroke='%s' stroke-width='2' fill='none' stroke-dasharray='5,5'/>\n", 
+                get_form_style_border_color(style));
+    }
+    
+    fprintf(svg_file, 
+        "\t\t<circle id='%d' r='%lf' cx='%lf' cy='%lf' fill='%s' stroke='%s' stroke-width='%s' fill-opacity='0.8'>\n",
+        form_id, r, x, y, get_form_style_fill_color(style), get_form_style_border_color(style), get_form_style_stroke_width(style)
+    );
+    
+    if (path_points != NULL && list_get_size(path_points) > 1) {
+        fprintf(svg_file, 
+            "\t\t\t<animateMotion dur='5s' repeatCount='indefinite'>\n"
+            "\t\t\t\t<mpath href='#path_%d'/>\n"
+            "\t\t\t</animateMotion>\n",
+            form_id
+        );
+    }
+    
+    fprintf(svg_file, "\t\t</circle>\n");
+    fprintf(svg_file, "\t</g>\n");
+}
+
 static void export_form(void *value, callback_data call_data) {
     Form form = (Form) value; 
     FILE *svg_file = call_data; 
@@ -112,6 +168,11 @@ static void export_form(void *value, callback_data call_data) {
         case TEXT: {
             char *form_text = form_get_text(form);
             svg_export_text(svg_file, form_id, x, y, form_text, form_style);
+            break;
+        }
+        case ANIMATED: {
+            List path_points = form_get_path_points(form);
+            svg_export_animated_form(svg_file, form_id, x, y, 10, form_style, path_points);
             break;
         }
         default:

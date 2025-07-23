@@ -8,6 +8,7 @@
 #include "../utils/file.h"
 #include "../city/block.h"
 #include "../city/point.h"
+#include "../city/path.h"
 #include "../data_structures/list.h"
 
 #define MAX_LINE_LENGTH 512 
@@ -103,53 +104,111 @@ static void o_find_adrees_vertex(char *line_buffer, SmuTreap aux_treap, Hash blo
         return;
     }
 
-    hash_insert(registers, reg, &data.nearest_info);   
+    Node *node_id_ptr = (Node *) malloc(sizeof(Node));
+    *node_id_ptr = data.nearest_info;
+    hash_insert(registers, reg, node_id_ptr);   
     list_free(blocks_in_range_list, NULL);
 }
 
-static void qry_execute(FILE *qry_file, FILE *txt_file, Graph graph, SmuTreap aux_treap, Hash block_table, Hash registers) {
+static void create_path(char *line_buffer, Hash registers, Graph graph, Hash path_table) {
+    char path_name[ARG_SIZE] = {0}, subgraph[ARG_SIZE] = {0}, origin[ARG_SIZE] = {0}, dest[ARG_SIZE] = {0}; 
+    int parsed = sscanf(line_buffer, "%*s %s %s %s %s", path_name, subgraph, origin, dest); 
+    if (parsed != 4) {
+        fprintf(stderr, "(processor_qry) Error: couldn't parse the arguments for path creation\n");
+        return; 
+    }
+    
+    Node *origin_node = (Node *) hash_get(registers, origin);
+    Node *dest_node = (Node *) hash_get(registers, dest);
+
+    if (origin_node == NULL || dest_node == NULL) {
+        fprintf(stderr, "(processor_qry) Error: origin or dest_node could not be defined\n");
+        return; 
+    }
+    
+    Point start_point = getNodeInfo(graph, *origin_node);
+    double start_x, start_y; 
+    point_get_coordinates(start_point, &start_x, &start_y);
+    
+    Dict came_from_length, cost_so_far_length; 
+    a_star(graph, *origin_node, *dest_node, &came_from_length, &cost_so_far_length, true);
+    List path_length = reconstruct_path(came_from_length, *origin_node, *dest_node, graph); 
+    Form path_form_length = new_animated_form_wrapper(0, start_x, start_y, 10, path_length);
+    hash_set(path_table, path_name, path_form_length);
+    
+    Dict came_from_velocity, cost_so_far_velocity; 
+    a_star(graph, *origin_node, *dest_node, &came_from_velocity, &cost_so_far_velocity, false);
+    List path_velocity = reconstruct_path(came_from_velocity, *origin_node, *dest_node, graph); 
+    Form path_form_velocity = new_animated_form_wrapper(0, start_x, start_y, 10, path_velocity);
+    
+    char faster_path_name[ARG_SIZE + 10] = {0};
+    snprintf(faster_path_name, sizeof(faster_path_name), "%s_fast", path_name);
+    hash_set(path_table, faster_path_name, path_form_velocity);
+}
+
+static void output_path(char *line_buffer, Graph graph, Hash paths_table) {
+    char path_name[ARG_SIZE] = {0}, cmc_color[ARG_SIZE] = {0}, cmr_color[ARG_SIZE] = {0}; 
+    int parsed = sscanf(line_buffer, "%*s %s %s %s", path_name, cmc_color, cmr_color); 
+    if (parsed != 3) {
+        fprintf(stderr, "(processor_qry) Error: couldn't parse aguments for path output");
+    }
+    // TODO: OUTPUT PATH 
+    // Form path = 
+}
+
+static void qry_execute(FILE *qry_file, FILE *txt_file, Graph graph, SmuTreap aux_treap, Hash block_table, Hash registers, List export_forms) {
     assert(qry_file);
 
     char line_buffer[MAX_LINE_LENGTH]; 
     char command_type[10]; 
+    Hash paths = new_hash(10); 
 
     while (fgets(line_buffer, sizeof(line_buffer), qry_file) != NULL) {
         if (process_command(line_buffer, command_type) == false) continue; 
 
         if (strcmp(command_type, "@o?") == 0) {
             o_find_adrees_vertex(line_buffer, aux_treap, block_table, registers);
+        } else if (strcmp(command_type, "p?") == 0) {
+            create_path(line_buffer, registers, graph, paths);
+        } else if (strcmp(command_type, "shw") == 0) {
+            
         } else {
             fprintf(stderr, "ERROR: processor_qry unknown command type '%s'\n", command_type);
         }
     }
+
 }
 
-void qry_process(Dir qry, Dir txt, Hash registers, Graph graph, SmuTreap aux_treap, Hash blocks_table) {
+List qry_process(Dir qry, Dir txt, Hash registers, Graph graph, SmuTreap aux_treap, Hash blocks_table) {
+    List export_forms = new_list(); 
+
     char *file_extension = get_dir_file_extension(qry);
     if (strcmp(file_extension, "qry") != 0) {
         fprintf(stderr, "ERROR: processor_qry requires a .qry file extension\n"); 
-        return; 
+        return NULL; 
     }
 
     if (txt == NULL) {
         fprintf(stderr, "ERROR: processor_qry requires a .txt file to reports\n"); 
-        return; 
+        return NULL; 
     }
 
     FILE *qry_file = file_open_readable(qry);
     if (qry_file == NULL) {
         fprintf(stderr, "ERROR: processor_qry couldn't open the .qry file\n"); 
-        return; 
+        return NULL; 
     }
     
     FILE *txt_file = file_open_writable(txt);
     if (txt_file == NULL) {
         fprintf(stderr, "ERROR: processor_qry couldn't open the .txt file\n"); 
         file_close(qry_file);
-        return; 
+        return NULL; 
     }
 
-    qry_execute(qry_file, txt_file, graph, aux_treap, blocks_table, registers);
+    qry_execute(qry_file, txt_file, graph, aux_treap, blocks_table, registers, export_forms);
     file_close(qry_file);
     file_close(txt_file);
+
+    return export_forms; 
 }

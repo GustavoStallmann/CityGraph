@@ -1,5 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include "../data_structures/graph.h"
 #include "../data_structures/pqueue.h"
 #include "../data_structures/dictionary.h"
@@ -14,6 +16,7 @@ typedef struct AStarData_st {
     Node current; 
     Node goal;
     Graph graph; 
+    bool use_length;
 } AStarData_st; 
 
 static double heuristic(Point x, Point y) {
@@ -23,7 +26,7 @@ static double heuristic(Point x, Point y) {
     return sqrt(pow(x2 - x1, 2) + pow(y2 -y1, 2));
 }
 
-void a_star_foreach_adjacencie(ListValue value, void *d) {
+static void a_star_foreach_adjacencie(ListValue value, void *d) {
     Edge edge = (Edge) value; 
     AStarData_st *data = (AStarData_st *) d; 
     if (edge == NULL) return; 
@@ -37,7 +40,12 @@ void a_star_foreach_adjacencie(ListValue value, void *d) {
 
     double *actual_cost_so_far = (double *) dict_get(data->cost_so_far, data->current); 
     double *new_cost = (double *) malloc(sizeof(double));
-    *new_cost = *actual_cost_so_far + street_length; 
+    
+    if (data->use_length) {
+        *new_cost = *actual_cost_so_far + street_length;
+    } else {
+        *new_cost = *actual_cost_so_far + (street_length / street_mean_velocity);
+    } 
 
     double *next_cost = (double *) dict_get(data->cost_so_far, to_node);
     bool next_not_in_cost_so_far = (next_cost == NULL);
@@ -48,7 +56,10 @@ void a_star_foreach_adjacencie(ListValue value, void *d) {
         Point goal_point = getNodeInfo(data->graph, data->goal);
 
         double priority = *new_cost + heuristic(to_point, goal_point);
-        pqueue_enqueue(data->queue, &to_node, priority);
+        
+        Node *to_node_ptr = (Node *) malloc(sizeof(Node));
+        *to_node_ptr = to_node;
+        pqueue_enqueue(data->queue, to_node_ptr, priority);
         
         Node *from_node_ptr = (Node *) malloc(sizeof(Node));
         *from_node_ptr = data->current;
@@ -59,21 +70,23 @@ void a_star_foreach_adjacencie(ListValue value, void *d) {
     free(new_cost);
 }
 
-void a_star(Graph graph, Node start, Node goal) {
+void a_star(Graph graph, Node start, Node goal, Dict *came_from, Dict *cost_so_far, bool use_length) {
     int graph_size = getMaxNodes(graph);
     if (graph_size <= 0) return; 
 
     PriorityQueue frontier = new_priority_queue(graph_size); 
-    pqueue_enqueue(frontier, &start, 0);
+    Node *start_ptr = (Node *) malloc(sizeof(Node));
+    *start_ptr = start;
+    pqueue_enqueue(frontier, start_ptr, 0);
 
-    Dict came_from = new_dict(graph_size);
-    Dict cost_so_far = new_dict(graph_size);
+    *came_from = new_dict(graph_size);
+    *cost_so_far = new_dict(graph_size);
 
-    dict_put(came_from, start, NULL);
+    dict_put(*came_from, start, NULL);
     
     double *start_cost = (double *) malloc(sizeof(double));
     *start_cost = 0.0;
-    dict_put(cost_so_far, start, start_cost);
+    dict_put(*cost_so_far, start, start_cost);
 
     while (!pqueue_is_empty(frontier)) {
         Node *current_node = pqueue_dequeue(frontier);
@@ -86,10 +99,11 @@ void a_star(Graph graph, Node start, Node goal) {
         adjacentEdges(graph, *current_node, current_node_adjacencies); 
 
         AStarData_st data = {
-            .came_from = came_from, .cost_so_far = cost_so_far, 
+            .came_from = *came_from, .cost_so_far = *cost_so_far, 
             .graph = graph, .current = *current_node, 
             .goal = goal,
-            .queue = frontier
+            .queue = frontier,
+            .use_length = use_length
         };
         list_foreach(current_node_adjacencies, &a_star_foreach_adjacencie, &data);
         
@@ -98,26 +112,24 @@ void a_star(Graph graph, Node start, Node goal) {
     
 }
 
-List reconstruct_path(Dict came_from, Node start, Node goal) {
+List reconstruct_path(Dict came_from, Node start, Node goal, Graph graph) {
     List path = new_list();
     Node current = goal;
     
     while (current != start) {
-        Node *current_ptr = (Node *) malloc(sizeof(Node));
-        *current_ptr = current;
-        list_insert(path, current_ptr);
+        Point current_point = getNodeInfo(graph, current);
+        list_insert(path, current_point);
         
         Node *parent = (Node *) dict_get(came_from, current);
         if (parent == NULL) {
-            list_free(path, free);
+            list_free(path, NULL);
             return new_list();
         }
         current = *parent;
     }
     
-    Node *start_ptr = (Node *) malloc(sizeof(Node));
-    *start_ptr = start;
-    list_insert(path, start_ptr);
+    Point start_point = getNodeInfo(graph, start);
+    list_insert(path, start_point);
     
     return path;
 }

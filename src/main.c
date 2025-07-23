@@ -120,10 +120,10 @@ static void list_extract_block_form(void *value, callback_data call_data) {
     Form text_form = block_get_form_text(block);
 
     if (block_form != NULL) {
-        list_insert(target_list, block_form);
+        list_insert_end(target_list, block_form);
     }
 
     if (text_form != NULL) {
-        list_insert_end(target_list, text_form);
+        list_insert(target_list, text_form);
     }
 }

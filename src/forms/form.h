@@ -3,12 +3,14 @@
 
 #include "form_style.h"
 #include "form_state.h"
+#include "../data_structures/list.h"
 
 typedef enum {
     CIRCLE, 
     RECT, 
     TEXT, 
-    LINE
+    LINE,
+    ANIMATED
 } FormType;
 
 // typedef int FormType; 
@@ -27,6 +29,24 @@ typedef void* Form;
  * @return the new form created
 */
 Form new_form(FormType type, int id, double x, double y, double wr, double h, char *text, FormStyle style);
+
+/*
+ * Create a new animated form that follows a path
+ * @param id the identifier of the form
+ * @param x the starting horizontal coordinate
+ * @param y the starting vertical coordinate
+ * @param r the radius of the animated form
+ * @param path_points the list of points to follow (from A* algorithm)
+ * @return the new animated form created
+*/
+Form new_animated_form_wrapper(int id, double x, double y, double r, List path_points);
+
+/*
+ * Gets the path points list for an animated form (for SVG export)
+ * @param form the animated form
+ * @return the list of path points, or NULL if not an animated form
+ */
+List form_get_path_points(Form form);
 
 /* 
  * Sets the minimum bounding box of the form in the given variables
