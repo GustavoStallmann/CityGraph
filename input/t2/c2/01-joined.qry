@@ -1,8 +1,8 @@
-@o? R1 B41-6.3 N 20
-@o? R2 B44-9.4 L 37
+@o? R1 B30-1.13 N 82
+@o? R2 B44-9.9 N 78
 p? prc_ida - R1 R2
-@o? R1 B43-9.7 L 37
-@o? R2 B40-4.1 L 29
+@o? R1 B30-14.10 N 27
+@o? R2 B44-3.7 N 58
 p? prc2_ida - R1 R2
 join joined prc_ida prc2_ida
 shw joined #aa00d4 #2ca04f

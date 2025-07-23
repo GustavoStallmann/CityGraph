@@ -1,9 +1,9 @@
-@o? R1 B31-8.12 N 50
-@o? R2 B31-5.16 N 78
+@o? R1 B41-2.1 L 40
+@o? R2 B32-8.6 L 41
 p? prc_0 - R1 R2
-@o? R2 B30-2.11 S 10
+@o? R2 B43-2.4 S 68
 p? prc_1 - R2 R1
-@o? R2 B31-10.10 O 45
+@o? R2 B44-4.9 S 94
 p? prc_2 - R1 R2
 join prc prc_0 prc_1
 join prc prc prc_2

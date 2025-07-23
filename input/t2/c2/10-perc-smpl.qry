@@ -21,71 +21,71 @@ sg sg_20 2785.71 2905.88 4223.57 209.71
 sg sg_21 -30.00 3115.59 2815.71 209.71
 sg sg_22 4193.57 3115.59 2815.71 209.71
 sg sg_23 8417.14 3115.59 2815.71 209.71
-@o? R1 B31-4.13 O 43
-@o? R3 B31-3.12 L 29
-p? psg_ida sg_4 R1 R3
-@o? R1 B30-6.5 O 24
-@o? R3 B30-6.2 S 38
-p? psg_ida sg_5 R1 R3
-@o? R1 B32-6.15 L 39
-@o? R3 B32-6.6 O 24
-p? psg_ida sg_6 R1 R3
-@o? R1 B32-11.6 N 19
-@o? R3 B31-11.12 O 33
-p? psg_ida sg_8 R1 R3
-@o? R1 B30-13.10 N 18
-@o? R3 B30-13.15 N 86
-p? psg_ida sg_9 R1 R3
-@o? R1 B32-13.16 N 17
-@o? R3 B32-14.10 N 23
-p? psg_ida sg_10 R1 R3
-@o? R1 B32-18.9 L 19
-@o? R3 B32-19.11 O 57
-p? psg_ida sg_12 R1 R3
-@o? R1 B30-20.2 L 46
-@o? R3 B30-20.11 S 26
-p? psg_ida sg_13 R1 R3
-@o? R1 B32-20.15 S 61
-@o? R3 B32-20.7 S 11
-p? psg_ida sg_14 R1 R3
-@o? R1 B42-2.9 O 72
-@o? R3 B41-2.9 N 14
-p? psg_ida sg_16 R1 R3
-@o? R1 B40-4.3 S 80
-@o? R3 B40-4.12 N 80
-p? psg_ida sg_17 R1 R3
-@o? R1 B43-4.2 O 28
-@o? R3 B42-4.12 O 61
-p? psg_ida sg_18 R1 R3
-@o? R1 B44-4.8 N 20
-@o? R3 B44-4.4 O 65
-p? psg_ida sg_19 R1 R3
-@o? R1 B42-8.6 N 100
-@o? R3 B43-8.4 N 2
-p? psg_ida sg_20 R1 R3
-@o? R1 B40-10.2 L 75
-@o? R3 B41-10.3 S 31
-p? psg_ida sg_21 R1 R3
-@o? R1 B42-10.11 L 1
-@o? R3 B42-10.12 N 23
-p? psg_ida sg_22 R1 R3
-@o? R1 B44-10.12 S 47
-@o? R3 B44-10.7 L 58
-p? psg_ida sg_23 R1 R3
-join prcsubs psg_ida psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
-join prcsubs prcsubs psg_ida
+@o? R1 B32-4.10 L 34
+@o? R3 B31-4.14 O 38
+p? psgsg_4_ida sg_4 R1 R3
+@o? R1 B30-6.14 L 22
+@o? R3 B31-6.3 S 27
+p? psgsg_5_ida sg_5 R1 R3
+@o? R1 B32-6.9 L 12
+@o? R3 B32-6.3 L 65
+p? psgsg_6_ida sg_6 R1 R3
+@o? R1 B31-11.14 N 55
+@o? R3 B31-11.7 N 53
+p? psgsg_8_ida sg_8 R1 R3
+@o? R1 B31-14.1 O 3
+@o? R3 B31-13.2 N 49
+p? psgsg_9_ida sg_9 R1 R3
+@o? R1 B32-14.2 O 16
+@o? R3 B32-13.12 L 51
+p? psgsg_10_ida sg_10 R1 R3
+@o? R1 B32-18.1 L 65
+@o? R3 B32-19.3 L 55
+p? psgsg_12_ida sg_12 R1 R3
+@o? R1 B30-20.8 N 43
+@o? R3 B30-20.12 L 50
+p? psgsg_13_ida sg_13 R1 R3
+@o? R1 B32-20.7 N 61
+@o? R3 B32-20.10 N 31
+p? psgsg_14_ida sg_14 R1 R3
+@o? R1 B43-2.3 N 26
+@o? R3 B42-2.5 O 33
+p? psgsg_16_ida sg_16 R1 R3
+@o? R1 B40-4.3 N 98
+@o? R3 B41-4.3 O 21
+p? psgsg_17_ida sg_17 R1 R3
+@o? R1 B42-4.6 N 88
+@o? R3 B42-4.12 L 80
+p? psgsg_18_ida sg_18 R1 R3
+@o? R1 B44-4.3 N 16
+@o? R3 B44-4.4 O 25
+p? psgsg_19_ida sg_19 R1 R3
+@o? R1 B42-8.4 S 60
+@o? R3 B42-8.12 L 35
+p? psgsg_20_ida sg_20 R1 R3
+@o? R1 B41-10.1 N 102
+@o? R3 B41-10.2 S 75
+p? psgsg_21_ida sg_21 R1 R3
+@o? R1 B42-10.3 N 35
+@o? R3 B43-10.2 N 95
+p? psgsg_22_ida sg_22 R1 R3
+@o? R1 B44-10.5 N 39
+@o? R3 B44-10.12 L 33
+p? psgsg_23_ida sg_23 R1 R3
+join prcsubs psgsg_4_ida psgsg_5_ida
+join prcsubs prcsubs psgsg_6_ida
+join prcsubs prcsubs psgsg_8_ida
+join prcsubs prcsubs psgsg_9_ida
+join prcsubs prcsubs psgsg_10_ida
+join prcsubs prcsubs psgsg_12_ida
+join prcsubs prcsubs psgsg_13_ida
+join prcsubs prcsubs psgsg_14_ida
+join prcsubs prcsubs psgsg_16_ida
+join prcsubs prcsubs psgsg_17_ida
+join prcsubs prcsubs psgsg_18_ida
+join prcsubs prcsubs psgsg_19_ida
+join prcsubs prcsubs psgsg_20_ida
+join prcsubs prcsubs psgsg_21_ida
+join prcsubs prcsubs psgsg_22_ida
+join prcsubs prcsubs psgsg_23_ida
 shw prcsubs #aa00d4 #2ca04f

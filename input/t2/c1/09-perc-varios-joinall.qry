@@ -1,17 +1,17 @@
-@o? R1 b08.8 N 43
-@o? R2 b01.1 L 69
+@o? R1 b06.10 N 29
+@o? R2 b08.1 L 70
 p? smp_0_ida - R1 R2
-@o? R1 b09.1 L 24
-@o? R2 b09.10 N 105
+@o? R1 b01.2 N 107
+@o? R2 b09.10 N 97
 p? smp_1_ida - R1 R2
-@o? R1 b02.9 S 44
-@o? R2 b05.1 L 68
+@o? R1 b010.2 N 9
+@o? R2 b06.10 N 47
 p? smp_2_ida - R1 R2
-@o? R1 b04.10 O 32
-@o? R2 b09.1 L 44
+@o? R1 b09.10 L 23
+@o? R2 b010.1 S 37
 p? smp_3_ida - R1 R2
-@o? R1 b02.3 L 25
-@o? R2 b08.10 S 90
+@o? R1 b02.1 N 80
+@o? R2 b010.9 S 64
 p? smp_4_ida - R1 R2
 join prc smp_0_ida smp_1_ida
 join prc prc smp_2_ida

@@ -1,9 +1,9 @@
-@o? R1 b02.8 S 85
-@o? R2 b010.4 S 20
+@o? R1 b05.8 L 2
+@o? R2 b08.7 S 24
 p? prc_0 - R1 R2
-@o? R2 b04.2 L 54
+@o? R2 b02.8 N 62
 p? prc_1 - R2 R1
-@o? R2 b010.10 O 52
+@o? R2 b03.7 L 47
 p? prc_2 - R1 R2
 shw prc_0 #aa00d4 #2ca04f
 shw prc_1 #aa00d4 #2ca04f
