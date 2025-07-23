@@ -33,7 +33,7 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
 
     Form_st *form = (Form_st *) malloc(sizeof(Form_st)); 
     if (form == NULL) {
-        fprintf(stderr, "[form] Error: insufficient memory to alloc");
+        fprintf(stderr, "[form] Error: insufficient memory to alloc\n");
         exit(EXIT_FAILURE); 
     }
 
@@ -55,17 +55,17 @@ Form new_form(FormType tp, int id, double x, double y, double wr, double h, char
             form->form_instance = new_text(x, y, text, style);
             break;
         case ANIMATED:
-            fprintf(stderr, "[form] Error: use new_animated_form_wrapper for ANIMATED forms"); 
+            fprintf(stderr, "[form] Error: use new_animated_form_wrapper for ANIMATED forms\n"); 
             free(form); 
             return NULL;
         default:
-            fprintf(stderr, "[form] Error: got an undefined form type to creation"); 
+            fprintf(stderr, "[form] Error: got an undefined form type to creation\n"); 
             free(form); 
             return NULL; 
     }
 
     if (form->form_instance == NULL) {
-        fprintf(stderr, "[form] Error: couldn't alloc memory for the form"); 
+        fprintf(stderr, "[form] Error: couldn't alloc memory for the form\n"); 
         free(form); 
         return NULL; 
     }
@@ -95,7 +95,7 @@ void form_get_bounding_box(Form form, double *x, double *y, double *w, double *h
             break;
         
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to compute the bounding box");
+            fprintf(stderr, "[form] Error: invalid form provided to compute the bounding box\n");
             break;
     }
 }
@@ -118,7 +118,7 @@ FormStyle form_get_style(Form form) {
             return get_line_style((Line) form_instance);
         
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to get style");
+            fprintf(stderr, "[form] Error: invalid form provided to get style\n");
             return NULL;
     }
 }
@@ -145,7 +145,7 @@ void form_get_coordinates(Form form, double *x, double *y) {
             break;
         
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to get coordinates");
+            fprintf(stderr, "[form] Error: invalid form provided to get coordinates\n");
             break;
     }
 }
@@ -173,7 +173,7 @@ void form_get_dimensions(Form form, double *w, double *h) {
             break;
         
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to get dimensions");
+            fprintf(stderr, "[form] Error: invalid form provided to get dimensions\n");
             break;
     }
 }
@@ -196,7 +196,7 @@ FormState form_get_state(Form form) {
             return get_line_state((Line) form_instance);
         
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to get state");
+            fprintf(stderr, "[form] Error: invalid form provided to get state\n");
             return NULL;
     }
 }
@@ -240,7 +240,7 @@ void form_transp(Form form, double x, double y) {
             line_transp((Line) form_instance, x, y);
             break;
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to translate");
+            fprintf(stderr, "[form] Error: invalid form provided to translate\n");
             break;
     }
 }
@@ -290,7 +290,7 @@ void form_free(Form form) {
             break;
         
         default:
-            fprintf(stderr, "[form] Error: invalid form provided to free memory");
+            fprintf(stderr, "[form] Error: invalid form provided to free memory\n");
             break;
     }
 
@@ -300,7 +300,7 @@ void form_free(Form form) {
 Form new_animated_form_wrapper(int id, double x, double y, double r, List path_points) {
     Form_st *form = (Form_st *) malloc(sizeof(Form_st)); 
     if (form == NULL) {
-        fprintf(stderr, "[form] Error: insufficient memory to alloc");
+        fprintf(stderr, "[form] Error: insufficient memory to alloc\n");
         exit(EXIT_FAILURE); 
     }
 
@@ -309,7 +309,7 @@ Form new_animated_form_wrapper(int id, double x, double y, double r, List path_p
     form->form_instance = new_animated_form(x, y, r, path_points);
 
     if (form->form_instance == NULL) {
-        fprintf(stderr, "[form] Error: couldn't alloc memory for the animated form"); 
+        fprintf(stderr, "[form] Error: couldn't alloc memory for the animated form\n"); 
         free(form); 
         return NULL; 
     }
