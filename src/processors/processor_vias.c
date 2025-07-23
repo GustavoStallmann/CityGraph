@@ -61,8 +61,8 @@ static void process_v(char *line_buffer, Graph graph, SmuTreap aux_treap) {
     }
 
     Point v_point = new_point(x, y); 
-    insertSmuT(aux_treap, x, y, v_point, 0,&fCalcPointBB);
-    addNode(graph, v_name, v_point);
+    Node new_node = addNode(graph, v_name, v_point);
+    insertSmuT(aux_treap, x, y, v_point, new_node,&fCalcPointBB);
 }
 
 static void process_e(char *line_buffer, Graph graph) {
@@ -91,7 +91,7 @@ static void process_e(char *line_buffer, Graph graph) {
         return; 
     }
 
-    Street edge_street = new_street(edge_name);
+    Street edge_street = new_street(edge_name, mean_vel, length);
     addEdge(graph, from_node, to_node, edge_street);
 }
 

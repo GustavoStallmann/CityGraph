@@ -13,7 +13,8 @@
  * @param "registers" the registers to save values
  * @param "Graph" the graph structure to perform the operations
  * @param "SmuTreap" auxiliar treap to help vector finding
+ * @param "blocks_table" city blocks table
 */
-void qry_process(Dir qry, Dir txt, Hash registers, Graph graph, SmuTreap aux_treap) ;
+void qry_process(Dir qry, Dir txt, Hash registers, Graph graph, SmuTreap aux_treap, Hash blocks_table);
 
 #endif

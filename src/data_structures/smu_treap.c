@@ -333,7 +333,7 @@ static void getInfosDentroRegiaoSmuT_aux(SmuTreap t, Node_st *root, BoundingBox 
     if (root == NULL) return;
     if (bounding_box_intersects(&root->sub_bb, &interest_bb) == false) return; // node subtree does not intersect the interest region
     
-    if (is_form_inside_region(NULL, root, root->form, x1, y1, x2, y2)) {
+    if (is_form_inside_region(NULL, root, root->formType, root->form, x1, y1, x2, y2)) {
         if (!list_includes(L, root, &compare_nodes)) {
             list_insert(L, root);
             promote_node_by_hit_count(t, root);

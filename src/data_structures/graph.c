@@ -18,7 +18,6 @@ typedef struct Graph_st {
 typedef struct Edge_st {
     Node from;
     Node to; 
-    bool active; 
     Info info; 
 } Edge_st; 
 

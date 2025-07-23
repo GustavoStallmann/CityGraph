@@ -72,7 +72,7 @@ typedef void *SmuNode;
 typedef void *Info;
 typedef int DescritorTipoInfo;
 
-typedef bool (*FdentroDeRegiao)(SmuTreap t, SmuNode n, Info i, double x1, double y1, double x2, double y2);
+typedef bool (*FdentroDeRegiao)(SmuTreap t, SmuNode n, DescritorTipoInfo type, Info i, double x1, double y1, double x2, double y2);
 /*
  * Uma funcao deste tipo deve retornar verdadeiro se a informacao i esta'
  * "dentro" da regiao retangular delimitada pelos pontos opostos (x1,y1) e (x2,y2).

@@ -35,11 +35,12 @@ int main(int argc, char *argv[]) {
 
     // Register and aux data structures
     Hash registers = new_hash(11); 
+    Hash blocks_table = new_hash(100);
     SmuTreap treap = newSmuTreap(1, 1, 0.1, 1000);
 
     // Process geo file (blocks)
     Dir geo_dir = dir_combine_path_and_file(config.base_input_dir, config.geo_file);
-    List blocks = geo_process(geo_dir);
+    List blocks = geo_process(geo_dir, blocks_table);
     
     // Process .via file (city)
     Dir via_dir = dir_combine_path_and_file(config.base_input_dir, config.via_file); 
@@ -50,7 +51,7 @@ int main(int argc, char *argv[]) {
     char txt_file_name[50]; 
     combine_file_names(get_dir_file_name(geo_dir), get_dir_file_name(qry_dir), "txt", txt_file_name, sizeof(txt_file_name));
     Dir txt_dir = dir_combine_path_and_file(config.base_output_dir, txt_file_name);
-    qry_process(qry_dir, txt_dir, registers, city_graph, treap);
+    qry_process(qry_dir, txt_dir, registers, city_graph, treap, blocks_table);
     
     // Extract forms from the blocks
     List block_forms = new_list(); 

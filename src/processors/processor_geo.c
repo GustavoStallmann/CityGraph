@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-#include "processor_dir.h"
+#include "processor_geo.h"
 #include "../data_structures/list.h" 
 #include "../forms/form_style.h" 
 #include "../city/block.h"
@@ -38,7 +38,7 @@ static FormStyle process_cq(char *line_buffer) {
     return ts; 
 }
 
-static Block process_block(char *line_buffer, FormStyle style) {
+static Block process_block(char *line_buffer, FormStyle style, Hash h_table) {
     char block_name[ARG_SIZE] = {0};
     double x = 0.0f, y = 0.0f, w = 0.0f, h = 0.0f; 
     int parsed = sscanf(line_buffer, "%*s %s %lf %lf %lf %lf", block_name, &x, &y, &w, &h); 
@@ -58,11 +58,12 @@ static Block process_block(char *line_buffer, FormStyle style) {
         return NULL;
     }
 
+    hash_insert(h_table, block_name, (HashValue) block);
+
     return block; 
 }
 
-
-static List geo_process_commands(FILE *geo_file) {
+static List geo_process_commands(FILE *geo_file, Hash h_table) {
     assert(geo_file);
 
     char line_buffer[MAX_LINE_LENGTH]; 
@@ -85,7 +86,7 @@ static List geo_process_commands(FILE *geo_file) {
             }
             actual_block_style = process_cq(line_buffer);
         } else if (strcmp(command_type, "q" ) == 0) {
-            block = process_block(line_buffer, actual_block_style);
+            block = process_block(line_buffer, actual_block_style, h_table);
         } else {
             fprintf(stderr, "(processor_geo) Error: invalid command on line %s\n", line_buffer);
         }
@@ -102,7 +103,7 @@ static List geo_process_commands(FILE *geo_file) {
     return form_list;
 }
 
-List geo_process(Dir dir) {
+List geo_process(Dir dir, Hash h_table) {
     char *file_extension = get_dir_file_extension(dir);
     if (strcmp(file_extension, "geo") != 0) {
         fprintf(stderr, "ERROR: processor_geo requires a .geo file extension\n"); 
@@ -115,7 +116,7 @@ List geo_process(Dir dir) {
         return NULL; 
     }
 
-    List form_list = geo_process_commands(geo_file);     
+    List form_list = geo_process_commands(geo_file, h_table);     
     file_close(geo_file);
     return form_list; 
 }
