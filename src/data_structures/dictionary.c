@@ -30,13 +30,14 @@ Dict new_dict(int size) {
 }
 
 int dict_get_size(Dict dict) {
+    if (dict == NULL) return 0;
     Dict_st *d = (Dict_st *) dict;
     return d->size;
 }
 
 void dict_put(Dict dict, DictKey key, DictValue value) {
     assert(dict);
-    if (key > dict_get_size(dict) || key < 0) return;
+    if (key >= dict_get_size(dict) || key < 0) return;
 
     Dict_st *d = (Dict_st *) dict;
     d->values[key] = value; 
@@ -44,7 +45,7 @@ void dict_put(Dict dict, DictKey key, DictValue value) {
 
 void dict_remove(Dict dict, DictKey key) {
     assert(dict);
-    if (key > dict_get_size(dict) || key < 0) return;
+    if (key >= dict_get_size(dict) || key < 0) return;
     
     Dict_st *d = (Dict_st *) dict;
     d->values[key] = NULL;
@@ -52,7 +53,7 @@ void dict_remove(Dict dict, DictKey key) {
 
 DictValue dict_get(Dict dict, DictKey key) {
     assert(dict); 
-    if (key > dict_get_size(dict) || key < 0) return NULL;
+    if (key >= dict_get_size(dict) || key < 0) return NULL;
     
     Dict_st *d = (Dict_st *)dict;
     return d->values[key];
@@ -60,13 +61,15 @@ DictValue dict_get(Dict dict, DictKey key) {
 
 bool dict_is_empty(Dict dict, DictKey key) {
     assert(dict); 
-    if (key > dict_get_size(dict) || key < 0) return false;
+    if (key >= dict_get_size(dict) || key < 0) return false;
 
     Dict_st *d = (Dict_st *)dict;
     return d->values[key] == NULL;
 }
 
 void dict_free(Dict dict) {
+    if (dict == NULL) return;
+    
     Dict_st *d = (Dict_st *) dict; 
 
     free(d->values);

@@ -228,3 +228,24 @@ int list_get_size(List lst) {
 
     return list->size; 
 }
+
+ListValue list_get(List lst, int index) {
+    assert(lst);
+
+    List_st *list = (List_st *) lst;
+    if (list == NULL || index < 0) return NULL;
+
+    ListNode_st *current = (ListNode_st *) list->head;
+    int current_index = 0;
+
+    while (current != NULL && current_index < index) {
+        current = (ListNode_st *) current->next;
+        current_index++;
+    }
+
+    if (current == NULL) {
+        return NULL;
+    }
+
+    return current->value;
+}

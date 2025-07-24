@@ -96,4 +96,12 @@ void list_free(List list, free_list_value func);
 */
 int list_get_size(List list); 
 
+/* 
+ * Get the value at a specific index in the list
+ * @param list the list to get the value from
+ * @param index the index of the element 0 > x < list.length
+ * @return ListValue the value at the given index, NULL if index is out of bounds
+*/
+ListValue list_get(List list, int index);
+
 #endif

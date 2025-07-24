@@ -232,50 +232,78 @@ void killDG(Graph g);
 */
 
 /*
-    Calcula o subgrafo composto  pelos vertices cujos nomes estao no vetor nomesVerts
-(nVerts e' o tamanho deste vetor). Caso comAresta seja true calcula o subgrafo
-induzido pelos vertices em nomesVers
-*/
-
-// void  createSubgraphDG(g, char *nomeSubgrafo, char *nomesVerts[], int nVert, bool comArestas);
-
-/*
-    Adiciona a aresta ao subgrafo.
+ * Calcula o subgrafo composto pelos vertices cujos nomes estao no vetor nomesVerts
+ * (nVerts e' o tamanho deste vetor). Caso comAresta seja true calcula o subgrafo
+ * induzido pelos vertices em nomesVerts
+ * @param "g" grafo principal onde o subgrafo será criado
+ * @param "nomeSubgrafo" nome do subgrafo a ser criado
+ * @param "nomesVerts" array com os nomes dos vertices que farao parte do subgrafo
+ * @param "nVert" tamanho do array nomesVerts
+ * @param "comArestas" se true, cria um subgrafo induzido (inclui todas as arestas entre os vertices)
  */
-// Edge includeEdgeSDG(g, char *nomeSubgrafo, e);
+void createSubgraphDG(Graph g, char *nomeSubgrafo, char *nomesVerts[], int nVert, bool comArestas);
 
 /*
-  Retorna verdadeiro se a aresta "e" pertence ao subgrafo "nomeSubgrafo" do grafo g;
-  falso, caso contrario.
+ * Adiciona a aresta ao subgrafo.
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo onde a aresta sera adicionada
+ * @param "e" aresta a ser adicionada ao subgrafo
+ * @return "Edge" a aresta adicionada, ou NULL se o subgrafo nao existir
+ */
+Edge includeEdgeSDG(Graph g, char *nomeSubgrafo, Edge e);
+
+/*
+ * Retorna verdadeiro se a aresta "e" pertence ao subgrafo "nomeSubgrafo" do grafo g;
+ * falso, caso contrario.
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo para verificar
+ * @param "e" aresta a ser verificada
+ * @return "bool" true se a aresta pertence ao subgrafo, false caso contrario
  */
 bool existsEdgeSDG(Graph g, char *nomeSubgrafo, Edge e);
 
 /*
-  Retira a aresta "e" do subgrafo "nomeSubgrafo". Ou seja, desfaz a correspondente
-  operacao includeEdgeSg previamente executada.
-  Note que a aresta  "e" NAO e' removida do grafo g.
+ * Retira a aresta "e" do subgrafo "nomeSubgrafo". Ou seja, desfaz a correspondente
+ * operacao includeEdgeSg previamente executada.
+ * Note que a aresta "e" NAO e' removida do grafo g.
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo de onde a aresta sera removida
+ * @param "e" aresta a ser removida do subgrafo
  */
 void excludeEdgeSDG(Graph g, char *nomeSubgrafo, Edge e);
 
 /*
-   Adiciona 'a lista "arestaAdjacentes" as arestas (x,y), tal que:
-   x == node; x pertence ao subgrafo "nomeSubgrafo", (x,y) tambem e' aresta
-   do subgrafo.
+ * Adiciona 'a lista "arestaAdjacentes" as arestas (x,y), tal que:
+ * x == node; x pertence ao subgrafo "nomeSubgrafo", (x,y) tambem e' aresta
+ * do subgrafo.
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo para buscar as arestas
+ * @param "node" no de origem das arestas adjacentes
+ * @param "arestasAdjacentes" lista onde serao inseridas as arestas adjacentes
  */
-// void adjacentEdgesSDG(Graph g, char *nomeSubgrafo, Node node, Lista arestasAdjacentes);
+void adjacentEdgesSDG(Graph g, char *nomeSubgrafo, Node node, List arestasAdjacentes);
 
 /*
-   Adiciona 'a lista "lstNodes" (Lista<Node>) os nós do subgrafo "nomeSubgrafo".
+ * Adiciona 'a lista "lstNodes" (Lista<Node>) os nos do subgrafo "nomeSubgrafo".
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo para obter os nos
+ * @param "lstNodes" lista onde serao inseridos os nos do subgrafo
  */
-// void getAllNodesSDG(Graph g, char *nomeSubgrafo,  Lista lstNodes);
+void getAllNodesSDG(Graph g, char *nomeSubgrafo, List lstNodes);
 
 /*
-   Adiciona 'a lista "lstEdges" (Lista<Edge>) as arestas do subgrafo "nomeSubgrafo".
+ * Adiciona 'a lista "lstEdges" (Lista<Edge>) as arestas do subgrafo "nomeSubgrafo".
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo para obter as arestas
+ * @param "lstEdges" lista onde serao inseridas as arestas do subgrafo
  */
-// void getAllEdgesSDG(Graph g, char *nomeSubgrafo, Lista lstEdges);
+void getAllEdgesSDG(Graph g, char *nomeSubgrafo, List lstEdges);
 
 /*
-  Novo grafo.
+ * Cria um novo grafo a partir de um subgrafo existente.
+ * @param "g" grafo principal que contem o subgrafo
+ * @param "nomeSubgrafo" nome do subgrafo a ser convertido em grafo
+ * @return "Graph" novo grafo criado a partir do subgrafo, ou NULL se o subgrafo nao existir
  */
-// Graph produceGraph(g, nomeSubgrafo);
+Graph produceGraph(Graph g, char *nomeSubgrafo);
 #endif

@@ -1,6 +1,7 @@
 #ifndef PATH_H
 #define PATH_H
 
+#include <stdio.h>
 #include <stdbool.h>
 #include "../data_structures/graph.h"
 #include "../data_structures/dictionary.h"
@@ -22,8 +23,9 @@ void a_star(Graph graph, Node start, Node goal, Dict *came_from, Dict *cost_so_f
  * @param "start" the starting node
  * @param "goal" the goal node
  * @param "graph" the graph instance to get node info from
+ * @param "txt_file" txt file for reports
  * @return "List" containing the path from start to goal (as Points)
  */
-List reconstruct_path(Dict came_from, Node start, Node goal, Graph graph);
+List reconstruct_path(Dict came_from, Node start, Node goal, Graph graph, FILE *txt_file);
 
 #endif

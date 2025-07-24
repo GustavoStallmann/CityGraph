@@ -44,7 +44,7 @@ static void heapify_up(PriorityQueue_st *pq, int index) {
     if (index == 0) return;
     
     int parent = parent_index(index);
-    if (pq->heap[index].priority > pq->heap[parent].priority) {
+    if (pq->heap[index].priority < pq->heap[parent].priority) {
         swap(pq->heap, index, parent);
         heapify_up(pq, parent);
     }
@@ -55,19 +55,19 @@ static void heapify_down(PriorityQueue_st *pq, int index) {
     
     int left = left_child_index(index);
     int right = right_child_index(index);
-    int largest = index;
+    int smallest = index;
     
-    if (left < pq->size && pq->heap[left].priority > pq->heap[largest].priority) {
-        largest = left;
+    if (left < pq->size && pq->heap[left].priority < pq->heap[smallest].priority) {
+        smallest = left;
     }
     
-    if (right < pq->size && pq->heap[right].priority > pq->heap[largest].priority) {
-        largest = right;
+    if (right < pq->size && pq->heap[right].priority < pq->heap[smallest].priority) {
+        smallest = right;
     }
     
-    if (largest != index) {
-        swap(pq->heap, index, largest);
-        heapify_down(pq, largest);
+    if (smallest != index) {
+        swap(pq->heap, index, smallest);
+        heapify_down(pq, smallest);
     }
 }
 

@@ -38,7 +38,6 @@ static void process_nv(Graph *graph, char *line_buffer) {
     *graph = createGraph(g_size, false, "-"); 
 }
 
-
 static void fCalcPointBB(DescritorTipoInfo tp, Info i, double *x, double *y, double *w, double *h) {
     (void) tp; 
     point_get_coordinates(i, x, y);

@@ -208,7 +208,6 @@ void svg_export_forms() {
     assert(exporter_instance); 
     if (exporter_instance->export_dir == NULL) return; 
 
-    // Reset unique ID counter for each export
     exporter_instance->unique_id_counter = 1;
 
     FILE *svg_file = file_open_writable(exporter_instance->export_dir); 

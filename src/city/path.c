@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <float.h>
 #include <stdbool.h>
 #include "../data_structures/graph.h"
 #include "../data_structures/pqueue.h"
@@ -31,14 +32,19 @@ static void a_star_foreach_adjacencie(ListValue value, void *d) {
     AStarData_st *data = (AStarData_st *) d; 
     if (edge == NULL) return; 
     
-    Node from_node = getFromNode(data->graph, edge);
     Node to_node = getToNode(data->graph, edge);
     Street edge_info = getEdgeInfo(data->graph, edge);
 
-    double street_mean_velocity, street_length; 
-    street_get_specs(edge_info, &street_mean_velocity, &street_length);
+    double street_mean_velocity = 0, street_length = 0; 
+    bool street_enabled = false; 
+    street_get_specs(edge_info, &street_mean_velocity, &street_length, &street_enabled, NULL);
+    if (!street_enabled) return; 
 
     double *actual_cost_so_far = (double *) dict_get(data->cost_so_far, data->current); 
+    if (actual_cost_so_far == NULL) {
+        return;
+    } 
+
     double *new_cost = (double *) malloc(sizeof(double));
     
     if (data->use_length) {
@@ -91,8 +97,10 @@ void a_star(Graph graph, Node start, Node goal, Dict *came_from, Dict *cost_so_f
         Node *current_node = pqueue_dequeue(frontier);
         if (current_node == NULL) break;
 
-        if (*current_node == goal) 
+        if (*current_node == goal) {
+            free(current_node);
             break; 
+        }
 
         List current_node_adjacencies = new_list(); 
         adjacentEdges(graph, *current_node, current_node_adjacencies); 
@@ -108,19 +116,39 @@ void a_star(Graph graph, Node start, Node goal, Dict *came_from, Dict *cost_so_f
         };
         list_foreach(current_node_adjacencies, &a_star_foreach_adjacencie, &data);
         list_free(current_node_adjacencies, NULL);
+        free(current_node);
     }
+    
+    while (!pqueue_is_empty(frontier)) {
+        Node *remaining_node = pqueue_dequeue(frontier);
+        if (remaining_node != NULL) {
+            free(remaining_node);
+        }
+    }
+    pqueue_free(frontier, NULL);
 }
 
-List reconstruct_path(Dict came_from, Node start, Node goal, Graph graph) {
+List reconstruct_path(Dict came_from, Node start, Node goal, Graph graph, FILE *txt_file) {
     List path = new_list();
     Node current = goal;
     
+    int step_count = 0;
     while (current != start) {
         Point current_point = getNodeInfo(graph, current);
         list_insert(path, current_point);
+
+        if (txt_file != NULL) {
+            double x, y;
+            point_get_coordinates(current_point, &x, &y);
+            
+            fprintf(txt_file, "\tPasso %d: Siga para o ponto (%.2f, %.2f) - Nó %d\n", ++step_count, x, y, current);
+        }
         
         Node *parent = (Node *) dict_get(came_from, current);
         if (parent == NULL) {
+            if (txt_file != NULL) {
+                fprintf(txt_file, "\nERRO: Caminho interrompido - não foi possível encontrar o nó pai.\n");
+            }
             list_free(path, NULL);
             return new_list();
         }

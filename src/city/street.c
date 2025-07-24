@@ -5,7 +5,6 @@
 #include <string.h>
 #include "street.h"
 
-
 typedef struct Street_st {
     char *name; 
     bool status; 
@@ -35,8 +34,9 @@ Street new_street(char *name, double mean_vel, double length) {
     street->name = alloc_str(name); 
     street->mean_vel = mean_vel; 
     street->length = length; 
+    street->status = true; 
 
-    return (Street) name; 
+    return (Street) street; 
 }
 
 void street_set_status(Street st, bool status) {
@@ -46,12 +46,18 @@ void street_set_status(Street st, bool status) {
     street->status = status;     
 }
 
-void street_get_specs(Street st, double *mean_vel, double *length) {
+void street_get_specs(Street st, double *mean_vel, double *length, bool *status, char *name) {
     assert(st);
     Street_st *street = (Street_st *) st; 
 
-    *mean_vel = street->mean_vel;
-    *length = street->length;
+    if (mean_vel != NULL)
+        *mean_vel = street->mean_vel;
+    if (length != NULL)
+        *length = street->length;
+    if (status != NULL)
+        *status = street->status; 
+    if (name != NULL)
+        strcpy(name, street->name);
 }
 
 void free_street(Street st) {

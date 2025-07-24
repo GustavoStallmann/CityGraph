@@ -34,11 +34,31 @@ clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 	rm -rf ${RESULT_DIR}
 
-run:
+c1:
 	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/00-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/01-joined.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/02-alag-central-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/03-alag-central-dren-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/04-alag-esp-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/05-alag-l-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/06-perc-estr3.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/07-perc-estr3-showall.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/08-perc-estr3-joinall.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/09-perc-varios-joinall.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/10-perc-smpl.qry"
 
 c2: 
 	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/00-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/01-joined.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/02-alag-central-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/03-alag-central-dren-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/04-alag-esp-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/05-alag-l-perc-smpl.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/06-perc-estr3.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/07-perc-estr3-showall.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/08-perc-estr3-joinall.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/09-perc-varios-joinall.qry"
+	./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c2.geo" -v "c2-v.via" -q "c2/10-perc-smpl.qry" 
 
 debug:
 	valgrind --leak-check=full ./${TARGET} -o ${RESULT_DIR} -e "./input/t2" -f "c1.geo" -v "c1-v.via" -q "c1/00-perc-smpl.qry"

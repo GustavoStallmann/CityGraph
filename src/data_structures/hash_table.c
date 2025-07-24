@@ -142,3 +142,22 @@ int hash_get_size(Hash t) {
     Hash_st *table = (Hash_st *) t; 
     return table->size;
 }
+
+void hash_free(Hash t) {
+    if (t == NULL) return;
+    
+    Hash_st *table = (Hash_st *) t;
+    
+    for (int i = 0; i < table->size; i++) {
+        HashNode_st *current = table->table[i];
+        while (current != NULL) {
+            HashNode_st *next = current->next;
+            free(current->key);
+            free(current);
+            current = next;
+        }
+    }
+    
+    free(table->table);
+    free(table);
+}

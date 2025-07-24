@@ -30,7 +30,6 @@ static void* form_get_instance(Form f) {
 }
 
 Form new_form(FormType tp, int id, double x, double y, double wr, double h, char *text, FormStyle style) {
-    assert(tp); 
 
     Form_st *form = (Form_st *) malloc(sizeof(Form_st)); 
     if (form == NULL) {
