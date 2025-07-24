@@ -113,6 +113,8 @@ static void build_path_point(void *value, void *call_data) {
 }
 
 static void svg_export_animated_form(FILE *svg_file, int form_id, double x, double y, double r, FormStyle style, List path_points) {
+    (void)x; 
+    (void)y; 
     fprintf(svg_file, "\t<g id='animated_%d'>\n", form_id);
     
     if (path_points != NULL && list_get_size(path_points) > 1) {

@@ -426,15 +426,6 @@ static Subgraph_st* create_subgraph(char *nomeSubgrafo) {
     return subgraph;
 }
 
-static void free_subgraph(Subgraph_st *subgraph) {
-    if (subgraph == NULL) return;
-    
-    if (subgraph->name) free(subgraph->name);
-    if (subgraph->vertices) list_free(subgraph->vertices, free);
-    if (subgraph->edges) list_free(subgraph->edges, NULL);
-    free(subgraph);
-}
-
 void createSubgraphDG(Graph g, char *nomeSubgrafo, char *nomesVerts[], int nVert, bool comArestas) {
     assert(g);
     assert(nomeSubgrafo);

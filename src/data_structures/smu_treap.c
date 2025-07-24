@@ -443,6 +443,8 @@ Info getInfoSmuT(SmuTreap t, SmuNode n) {
 }
 
 static void killSmuTreap_aux(SmuTreap t, SmuNode n, Info i, double x, double y, void *aux) {
+    (void)t; 
+    (void)n; 
     (void)x; 
     (void)y; 
     (void)aux; 

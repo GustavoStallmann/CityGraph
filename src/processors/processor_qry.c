@@ -120,7 +120,7 @@ static void o_find_adrees_vertex(char *line_buffer, SmuTreap aux_treap, Hash blo
 
     double nearest_x, nearest_y; 
     point_get_coordinates(data.nearest_point, &nearest_x, &nearest_y);
-    fprintf(txt_file, "\tPonto encontrado: (%lf, %lf)", nearest_x, nearest_y);
+    fprintf(txt_file, "\tPonto encontrado: (%lf, %lf)\n", nearest_x, nearest_y);
 
     Node *node_id_ptr = (Node *) malloc(sizeof(Node));
     *node_id_ptr = data.nearest_info;
@@ -130,12 +130,13 @@ static void o_find_adrees_vertex(char *line_buffer, SmuTreap aux_treap, Hash blo
 
 static void create_path(char *line_buffer, Hash registers, Graph graph, Hash path_table, List forms_export, FILE *txt_file) {
     char path_name[ARG_SIZE] = {0}, subgraph[ARG_SIZE] = {0}, origin[ARG_SIZE] = {0}, dest[ARG_SIZE] = {0}; 
+    
     int parsed = sscanf(line_buffer, "%*s %s %s %s %s", path_name, subgraph, origin, dest); 
     if (parsed != 4) {
         fprintf(stderr, "(processor_qry) Error: couldn't parse the arguments for path creation\n");
         return; 
     }
-
+    
     fprintf(txt_file, "[*] p? %s %s %s %s\n", path_name, subgraph, origin, dest);
     
     Node *origin_node = (Node *) hash_get(registers, origin);
@@ -200,6 +201,7 @@ static void create_path(char *line_buffer, Hash registers, Graph graph, Hash pat
 }
 
 static void output_path(char *line_buffer, Graph graph, Hash paths_table, List forms_to_output, FILE *txt_file) {
+    (void)graph; 
     char path_name[ARG_SIZE] = {0}, cmc_color[ARG_SIZE] = {0}, cmr_color[ARG_SIZE] = {0}; 
     int parsed = sscanf(line_buffer, "%*s %s %s %s", path_name, cmc_color, cmr_color); 
     if (parsed != 3) {
@@ -320,7 +322,7 @@ static void enable_edge(ListValue value, void *d) {
     double mean_vel, length; 
     char street_name[50];
     street_get_specs(edge_street, &mean_vel, &length, NULL, street_name);
-    fprintf(data->txt_file, "\t habilitando aresta de nome: %s (velocidade media: %lf; comprimento: %lf)\n", street_name, mean_vel, length);
+    fprintf(data->txt_file, "\thabilitando aresta de nome: %s (velocidade media: %lf; comprimento: %lf)\n", street_name, mean_vel, length);
 }
 
 static void dren(char *line_buffer, Dict alags, Graph graph, FILE *txt_file) {
@@ -346,7 +348,7 @@ static void dren(char *line_buffer, Dict alags, Graph graph, FILE *txt_file) {
     list_foreach(edges_list, &enable_edge, &data);
 }
 
-static void join(char *line_buffer, Graph graph, Hash paths, SmuTreap aux_treap, FILE *txt_file, List forms_export) {
+static void join(char *line_buffer, Graph graph, Hash paths, SmuTreap aux_treap, FILE *txt_file) {
     char np[ARG_SIZE] = {0}, np1[ARG_SIZE] = {0}, np2[ARG_SIZE] = {0};
     int parsed = sscanf(line_buffer, "%*s %s %s %s", np, np1, np2);
     if (parsed != 3) {
@@ -494,7 +496,7 @@ static void qry_execute(FILE *qry_file, FILE *txt_file, Graph graph, SmuTreap au
         } else if (strcmp(command_type, "dren") == 0) {
             dren(line_buffer, alags, graph, txt_file);
         } else if (strcmp(command_type, "join") == 0) {
-            join(line_buffer, graph, paths, aux_treap, txt_file, export_forms);
+            join(line_buffer, graph, paths, aux_treap, txt_file);
         }
     }
 }
