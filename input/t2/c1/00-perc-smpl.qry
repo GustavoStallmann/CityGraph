@@ -1,4 +1,0 @@
-@o? R1 b06.1 L 6
-@o? R2 b03.9 S 89
-p? prc_ida - R1 R2
-shw prc_ida #aa00d4 #2ca04f
