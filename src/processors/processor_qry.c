@@ -169,6 +169,7 @@ static void create_path(char *line_buffer, Hash registers, Graph graph, Hash pat
         Form line = new_form(LINE, -1, start_x, start_y, end_x, end_y, NULL, line_style);
         list_insert(forms_export, line);
         path_length = new_list();
+        return;
     }
     
     Form path_form_length = new_animated_form_wrapper(0, start_x, start_y, 10, path_length);
@@ -196,8 +197,8 @@ static void create_path(char *line_buffer, Hash registers, Graph graph, Hash pat
     char faster_path_name[ARG_SIZE + 10] = {0};
     snprintf(faster_path_name, sizeof(faster_path_name), "%s_fast", path_name);
     hash_set(path_table, faster_path_name, path_form_velocity);
-    export_register_identifier(forms_export, start_x, start_y, faster_path_name);
-    export_register_identifier(forms_export, end_x, end_y, faster_path_name);
+    export_register_identifier(forms_export, start_x, start_y, path_name);
+    export_register_identifier(forms_export, end_x, end_y, path_name);
 }
 
 static void output_path(char *line_buffer, Graph graph, Hash paths_table, List forms_to_output, FILE *txt_file) {
